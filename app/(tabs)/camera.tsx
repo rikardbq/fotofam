@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
     Button,
     Image,
@@ -14,6 +14,7 @@ import {
     useMicrophonePermission,
 } from "react-native-vision-camera";
 import { useDoubleTap } from "../../hooks/useDoubleTap";
+import { AppContext } from "@/context/AppContext";
 
 export default function CameraTab() {
     const camera = useRef<Camera>(null);
@@ -29,12 +30,13 @@ export default function CameraTab() {
     const { isDoubleTap, doubleTapHandler } = useDoubleTap();
     const [photo, setPhoto]: any = useState(null);
     const [isInit, setInit] = useState(false);
+    const { currentPhoto, setCurrentPhoto } = useContext(AppContext);
 
     useEffect(() => {
         if (isInit && isDoubleTap) {
             (async () => {
                 const file = await camera.current?.takePhoto();
-                setPhoto(file);
+                setCurrentPhoto(file);
             })();
         }
     }, [isDoubleTap, isInit]);

@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import { AppContextProvider } from "@/context/AppContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,11 +23,11 @@ export default function RootLayout() {
     }
 
     return (
-        <>
+        <AppContextProvider>
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack>
             <StatusBar style="auto" />
-        </>
+        </AppContextProvider>
     );
 }
