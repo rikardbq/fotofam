@@ -1,28 +1,30 @@
-import { useEffect, useState } from "react";
+import { useMemo, useReducer } from "react";
 import { createContext } from "react";
 
+import { rootReducer, initialState } from "@/reducer";
+import image from "@/reducer/imageReducer";
+
 type AppContextDefaultState = {
-    currentPhoto: any;
-    setCurrentPhoto: any;
+    useStore: any
 };
 
 export const AppContext: React.Context<AppContextDefaultState> = createContext({
-    currentPhoto: null,
-    setCurrentPhoto: null,
+    useStore: null
 });
 
 type AppContextProviderProps = {
     children: React.ReactNode;
 };
 
-export const AppContextProvider = ({ children }: AppContextProviderProps) => {
-    const [currentPhoto, setCurrentPhoto] = useState(null);
+const useStore = (store: any[]) => () => store;
 
+export const AppContextProvider = ({ children }: AppContextProviderProps) => {
+    const [state, dispatch] = useReducer(rootReducer, initialState);
+    const store = useMemo(() => [state, dispatch], [state]);
     return (
         <AppContext.Provider
             value={{
-                currentPhoto,
-                setCurrentPhoto,
+                useStore: useStore(store),
             }}
         >
             {children}

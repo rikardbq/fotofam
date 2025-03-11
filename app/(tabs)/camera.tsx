@@ -30,16 +30,24 @@ export default function CameraTab() {
     const { isDoubleTap, doubleTapHandler } = useDoubleTap();
     const [photo, setPhoto]: any = useState(null);
     const [isInit, setInit] = useState(false);
-    const { currentPhoto, setCurrentPhoto } = useContext(AppContext);
-
+    const { useStore } = useContext(AppContext);
+    const [ state, dispatch ] = useStore();
     useEffect(() => {
         if (isInit && isDoubleTap) {
             (async () => {
                 const file = await camera.current?.takePhoto();
-                setCurrentPhoto(file);
+                dispatch({
+                    type: "SET_CURRENT_PHOTO",
+                    data: { value: file?.path },
+                });
             })();
         }
     }, [isDoubleTap, isInit]);
+
+    useEffect(() => {
+        console.log(state);
+        
+    },[state]);
 
     if (!hasCamPermission) requestCamPermission();
     if (!hasMicPermission) requestMicPermission();
@@ -59,6 +67,14 @@ export default function CameraTab() {
                     alignSelf: "center",
                     zIndex: 999,
                 }}
+                onPress={async () =>
+                    dispatch({
+                        type: "SET_CURRENT_PHOTO",
+                        data: {
+                            value: (await camera?.current?.takePhoto())?.path,
+                        },
+                    })
+                }
             ></TouchableOpacity>
             <Camera
                 onTouchStart={doubleTapHandler}
