@@ -1,30 +1,82 @@
-import { useMemo, useReducer } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { createContext } from "react";
 
 import { rootReducer, initialState } from "@/reducer";
 import image from "@/reducer/imageReducer";
+import ImageService from "@/service/ImageService";
+import { useStore } from "@/hooks/useStore";
+import { useService } from "@/hooks/useService";
 
 type AppContextDefaultState = {
-    useStore: any
+    useStore: any;
+    useService: any;
 };
 
 export const AppContext: React.Context<AppContextDefaultState> = createContext({
-    useStore: null
+    useStore: null,
+    useService: null,
 });
 
 type AppContextProviderProps = {
     children: React.ReactNode;
 };
 
-const useStore = (store: any[]) => () => store;
+// const useService = (store: any) => () => {
+//     const [services, setServices] = useState({
+//         imageService: new ImageService(store), // new ImageService({ user: store.state.user, image: store.state.image })
+//         userService: null, // new UserService({ user: store.state.user })
+//     });
+
+//     useEffect(() => {
+//         console.log("redoing stuff?");
+
+//         setServices({
+//             ...services,
+//             imageService: new ImageService(store),
+//         });
+//         // services.userService.setUser(store.state.user);
+//     }, [store]);
+
+//     return services;
+// };
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
-    const [state, dispatch] = useReducer(rootReducer, initialState);
-    const store = useMemo(() => [state, dispatch], [state]);
+    const store = useStore();
+    const services = useService(store);
+    // const service = useMemo(() => {
+    //     console.log("asdasdasdasd");
+    //     console.log(service);
+
+    //     return {
+    //     imageService: new ImageService(store)}
+    // }, [store]);
+
+    // const [services, setServices] = useState({
+    //     imageService: new ImageService(store), // new ImageService({ user: store.state.user, image: store.state.image })
+    //     userService: null as any, // new UserService({ user: store.state.user })
+    // });
+
+    // useEffect(() => {
+    //     console.log("redoing stuff?");
+    //     console.log("INSIDE EFFECT ---> ", store, "services from state -> ", services);
+    //     setServices({
+    //         ...services,
+    //         imageService: new ImageService(store)
+    //     })
+    // }, [store]);
+
+    // useEffect(() => {
+    //     console.log("changed ", services.imageService);
+
+    // }, [services]);
+
+    console.log("SERVICES --> ", services);
+
     return (
         <AppContext.Provider
             value={{
-                useStore: useStore(store),
+                useStore: () => store,
+                useService: () => services,
             }}
         >
             {children}

@@ -6,10 +6,10 @@ import {
     Dispatch,
 } from "react";
 
-export function useDoubleTap(): {
+export const useDoubleTap = (): {
     isDoubleTap: boolean;
     doubleTapHandler: () => void;
-} {
+} => {
     const timer: MutableRefObject<any> = useRef(null);
     const [tapCount, setTapCount]: [number, Dispatch<SetStateAction<number>>] =
         useState(0);
@@ -31,4 +31,4 @@ export function useDoubleTap(): {
     };
 
     return { isDoubleTap, doubleTapHandler };
-}
+};

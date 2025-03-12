@@ -5,15 +5,17 @@ import axios from "axios";
 
 export default function Index(props: any) {
     console.log(props);
-    const { useStore } = useContext(AppContext);
+    const { useStore, useService, services: apa } = useContext(AppContext);
     const [state, dispatch] = useStore();
+    const services = useService();
     const {
         image: { currentPhoto },
     } = state;
 
     useEffect(() => {
         console.log(currentPhoto);
-    }, [currentPhoto]);
+        console.log("after currentphoto change ", apa);
+    }, [apa]);
 
     const [tex, setTex] = useState("");
 
@@ -37,6 +39,10 @@ export default function Index(props: any) {
         <>
             <Image
                 src={`file://${currentPhoto}`}
+                style={{ width: "100%", height: "60%", objectFit: "contain" }}
+            />
+            <Image
+                src={`file://${services.imageService.image.currentPhoto}`}
                 style={{ width: "100%", height: "60%", objectFit: "contain" }}
             />
             <Button title="hello" onPress={() => null} />

@@ -31,7 +31,7 @@ export default function CameraTab() {
     const [photo, setPhoto]: any = useState(null);
     const [isInit, setInit] = useState(false);
     const { useStore } = useContext(AppContext);
-    const [ state, dispatch ] = useStore();
+    const [state, dispatch] = useStore();
     useEffect(() => {
         if (isInit && isDoubleTap) {
             (async () => {
@@ -46,8 +46,7 @@ export default function CameraTab() {
 
     useEffect(() => {
         console.log(state);
-        
-    },[state]);
+    }, [state]);
 
     if (!hasCamPermission) requestCamPermission();
     if (!hasMicPermission) requestMicPermission();
