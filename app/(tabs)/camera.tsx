@@ -28,7 +28,6 @@ export default function CameraTab() {
         requestPermission: requestMicPermission,
     } = useMicrophonePermission();
     const { isDoubleTap, doubleTapHandler } = useDoubleTap();
-    const [photo, setPhoto]: any = useState(null);
     const [isInit, setInit] = useState(false);
     const { useStore } = useContext(AppContext);
     const [state, dispatch] = useStore();

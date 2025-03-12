@@ -2,20 +2,21 @@ import { AppContext } from "@/context/AppContext";
 import { useContext, useEffect, useState } from "react";
 import { Button, Image, Text, TouchableOpacity, View } from "react-native";
 import axios from "axios";
+import { useImageService } from "@/hooks/useService";
 
 export default function Index(props: any) {
     console.log(props);
-    const { useStore, useService, services: apa } = useContext(AppContext);
+    const { useStore } = useContext(AppContext);
     const [state, dispatch] = useStore();
-    const services = useService();
+    const imageService = useImageService([state, dispatch]);
     const {
         image: { currentPhoto },
     } = state;
 
     useEffect(() => {
         console.log(currentPhoto);
-        console.log("after currentphoto change ", apa);
-    }, [apa]);
+        console.log("after currentphoto change ", imageService);
+    }, [imageService]);
 
     const [tex, setTex] = useState("");
 
@@ -41,11 +42,11 @@ export default function Index(props: any) {
                 src={`file://${currentPhoto}`}
                 style={{ width: "100%", height: "60%", objectFit: "contain" }}
             />
+            <Button title="hello" onPress={() => setTex("asdasdasd")} />
             <Image
-                src={`file://${services.imageService.image.currentPhoto}`}
+                src={`file://${imageService.image.currentPhoto}`}
                 style={{ width: "100%", height: "60%", objectFit: "contain" }}
             />
-            <Button title="hello" onPress={() => null} />
             <Text>{tex}</Text>
             {/* <View
             style={{

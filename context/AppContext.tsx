@@ -5,16 +5,16 @@ import { rootReducer, initialState } from "@/reducer";
 import image from "@/reducer/imageReducer";
 import ImageService from "@/service/ImageService";
 import { useStore } from "@/hooks/useStore";
-import { useService } from "@/hooks/useService";
+// import { useService } from "@/hooks/useService";
 
 type AppContextDefaultState = {
     useStore: any;
-    useService: any;
+    // useService: any;
 };
 
 export const AppContext: React.Context<AppContextDefaultState> = createContext({
     useStore: null,
-    useService: null,
+    // useService: null,
 });
 
 type AppContextProviderProps = {
@@ -42,7 +42,7 @@ type AppContextProviderProps = {
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const store = useStore();
-    const services = useService(store);
+    // const services = useService(store);
     // const service = useMemo(() => {
     //     console.log("asdasdasdasd");
     //     console.log(service);
@@ -70,13 +70,12 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
     // }, [services]);
 
-    console.log("SERVICES --> ", services);
+    // console.log("SERVICES --> ", services);
 
     return (
         <AppContext.Provider
             value={{
                 useStore: () => store,
-                useService: () => services,
             }}
         >
             {children}

@@ -1,17 +1,24 @@
 import ImageService from "@/service/ImageService";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
-// probably just migrate to "free" function calls in a "file namespace"
-// OR use the services as part of the app root state
-export const useService = (store: any) => {
-    const [imageService, setImageService] = useState(new ImageService(store));
-    const [state, dispatch] = store;
+const serviceNames = {
+    IMAGE_SERVICE: "IMAGE_SERVICE",
+    USER_SERVICE: "USER_SERVICE",
+};
 
-    useEffect(() => {
-        console.log("saTATEWRTET ERT ", state.image);
-        
-        setImageService(new ImageService(store));
-    }, [state.image]);
+const services: { [key: string]: any } = {
+    IMAGE_SERVICE: (store: any) => new ImageService(store),
+    // USER_SERVICE: (store: any) => new UserService(store),
+};
 
-    return { imageService };
+const getService = (store: any, serviceName: string) =>
+    services[serviceName](store);
+
+export const useImageService = (store: any) => {
+    const service = useMemo(
+        () => getService(store, serviceNames.IMAGE_SERVICE),
+        [store[0]]
+    );
+
+    return service;
 };
