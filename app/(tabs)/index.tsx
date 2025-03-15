@@ -43,7 +43,7 @@ export default function Index(props: any) {
             />
             <Button title="hello" onPress={() => setTex("asdasdasd")} />
             <Image
-                src={`file://${imageService.image.currentPhoto}`}
+                src={`file://${imageService.getCurrentPhoto()}`}
                 style={{ width: "100%", height: "60%", objectFit: "contain" }}
             />
             <Text>{tex}</Text>
