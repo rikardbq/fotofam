@@ -14,7 +14,7 @@ const services: { [key: string]: any } = {
 const getService = (store: any, serviceName: string) =>
     services[serviceName](store);
 
-export const useImageService = (store: any) => {
+export const useImageService = (store: any): ImageService => {
     const service = useMemo(
         () => getService(store, serviceNames.IMAGE_SERVICE),
         [store[0]]

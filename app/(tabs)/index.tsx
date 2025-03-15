@@ -1,7 +1,6 @@
 import { AppContext } from "@/context/AppContext";
 import { useContext, useEffect, useState } from "react";
 import { Button, Image, Text, TouchableOpacity, View } from "react-native";
-import axios from "axios";
 import { useImageService } from "@/hooks/useService";
 
 export default function Index(props: any) {
