@@ -1,4 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+    MutableRefObject,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import {
     Button,
     Dimensions,
@@ -27,10 +34,15 @@ import { ScrollContainer } from "@/components/container/ScrollContainer";
 import * as MediaLibrary from "expo-media-library";
 
 export default function CameraTab() {
+    const [offsetY, setOffsetY] = useState(0);
+    const imageRefs: MutableRefObject<any[]> = useRef([]);
+    const inViewMap: MutableRefObject<any> = useRef({});
+    const itemsMap: MutableRefObject<any[]> = useRef([]);
     const [frameHeight, setFrameHeight] = useState(0);
     const [contentHeight, setContentHeight] = useState(0);
     const [albums, setAlbums] = useState<MediaLibrary.Album[]>([]);
-    const [photos, setPhotos] = useState<MediaLibrary.Asset[]>([]);
+    const [photos, setPhotos] = useState<(MediaLibrary.Asset & { hidden?: boolean})[]>([]);
+    let photosMemo = useMemo<MediaLibrary.Asset[]>(() => photos, [inViewMap.current]);
     const [photosCursor, setPhotosCursor] = useState("");
     const [permissionResponse, requestPermission] =
         MediaLibrary.usePermissions();
@@ -71,6 +83,7 @@ export default function CameraTab() {
             sortBy: "modificationTime",
         });
         setPhotosCursor(assets.endCursor);
+        // photosMemo = assets.assets;
         setPhotos(assets.assets);
     };
     async function getAlbums() {
@@ -130,11 +143,27 @@ export default function CameraTab() {
         },
     });
 
+    const checkInView = (id: string, idx: number) => {
+        const rect =
+            imageRefs && imageRefs.current[idx].el.getBoundingClientRect();
+        console.log(rect);
+
+        // setInViewMap({
+        //     ...inViewMap,
+        //     [id]: rect.top < window.innerHeight && rect.bottom >= 0,
+        // });
+    };
+
+    useEffect(() => {
+        console.log("changed");
+        
+    }, [inViewMap.current]);
+
     // TODO
     // add a complete camera screen to make navigation to and from camera better and also to make the camera layout and ui design live in 1 place as one screen.
     return (
         <BaseContainer>
-            <Image
+            {/* <Image
                 // src={`file://${state.image.currentPhoto.path}`}
                 source={{ uri: state.image.currentPhoto.path }}
                 style={{
@@ -142,16 +171,16 @@ export default function CameraTab() {
                     width: Dimensions.get("window").width,
                     resizeMode: "contain",
                 }}
-            />
+            /> */}
             <ScrollContainer
                 style={styles.scroll_container}
                 onLayout={(e) => {
                     const h = e.nativeEvent.layout.height;
-
                     setFrameHeight(h);
-                    //    const frameHeight = e.nativeEvent.layout.height;
-                    const maxOffset = contentHeight - h;
-                    console.log("onLayout max offset = ", maxOffset);
+
+                    // const maxOffset = contentHeight - h;
+                    // console.log("onLayout max offset = ", maxOffset);
+
                     //     if (maxOffset < this.yOffset) {
                     //       this.yOffset = maxOffset;
                     //     }
@@ -166,11 +195,42 @@ export default function CameraTab() {
                 }}
                 onScroll={async (e) => {
                     const offsetY = e.nativeEvent.contentOffset.y;
-                    console.log(e.nativeEvent.contentOffset.y);
-                    console.log(contentHeight - frameHeight);
+                    // setOffsetY(offsetY);
+                    // // setInViewMap({
+                    // //     ...inViewMap,
+
+                    // })
+
+                    // THIS WORKS, keeps a "window" of visible items based on item Y and height value relative to scrollY of the scrollView
+                    const off =
+                        e.nativeEvent.contentOffset.y;
+                    itemsMap.current.forEach(({ id, h, y }, idx) => {
+                        inViewMap.current[id] = {
+                            hidden: y + h < off || off + frameHeight < y,
+                        };
+                    });
+                    
+                    setPhotos(
+                        photos.map(p => ({
+                            ...p,
+                            hidden: inViewMap.current[p.id].hidden
+                        })
+                    ));
+                    // itemsMap.forEach(([k, v]: [k: string, v: any]) => {
+                    //     console.log(v);
+                    // });
+                    // console.log();
+                    // console.log(contentHeight - frameHeight);
 
                     // maybe do something with some array window, not sure how to do this yet
                     // current solution just eats too much memory and breaks down after some fetches
+
+                    // imageRefs.current.forEach((x) => {
+                    //     console.log(x.el.getBoundingClientRect());
+
+                    //     checkInView(x.id, x.idx);
+                    // });
+
                     if (offsetY + 300 > contentHeight - frameHeight) {
                         const assets = await MediaLibrary.getAssetsAsync({
                             first: 40,
@@ -179,15 +239,17 @@ export default function CameraTab() {
                             sortBy: "modificationTime",
                         });
                         setPhotosCursor(assets.endCursor);
+                        // photosMemo = [...photos, ...assets.assets];
                         setPhotos([...photos, ...assets.assets]);
                     }
                 }}
                 onScrollEndDrag={(e) => {
-                    console.log(e.nativeEvent.contentOffset.y);
+                    // console.log(e.nativeEvent.contentOffset.y);
+                    // console.log(inViewMap);
                 }}
                 scrollEventThrottle={16}
             >
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => {
                         navigation.navigate("(screens)/camera");
                     }}
@@ -201,12 +263,36 @@ export default function CameraTab() {
                         size={(Dimensions.get("window").width - 8) / 3}
                         color="white"
                     />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 {(photos?.length ?? 0) > 0 &&
                     photos?.map((p: MediaLibrary.Asset, idx: number) => {
-                        return (
+                        return inViewMap.current[p.id] &&
+                            inViewMap.current[p.id].hidden ? (
+                            <View
+                                key={p.id}
+                                style={{
+                                    backgroundColor: "coral",
+                                    height: 117,
+                                    width:
+                                        (Dimensions.get("window").width - 8) /
+                                        3,
+                                }}
+                            ></View>
+                        ) : (
                             <TouchableOpacity
-                                key={idx}
+                                onLayout={(e) => {
+                                    itemsMap.current.push({
+                                        id: p.id,
+                                        y:
+                                            e.nativeEvent.layout.y -
+                                            (insets.top + 6),
+                                        h: e.nativeEvent.layout.height,
+                                    });
+                                    inViewMap.current[p.id] = {
+                                        hidden: false,
+                                    };
+                                }}
+                                key={p.id}
                                 onPress={() => {
                                     dispatch({
                                         type: "SET_CURRENT_PHOTO",
@@ -224,7 +310,7 @@ export default function CameraTab() {
                                     source={{ uri: p.uri }}
                                     resizeMethod="resize"
                                     style={{
-                                        display: idx > 40 ? "none" : "flex",
+                                        // display: idx > 40 ? "none" : "flex",
                                         aspectRatio: 1 / 1,
                                         width:
                                             (Dimensions.get("window").width -
