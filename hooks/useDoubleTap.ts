@@ -6,7 +6,7 @@ import {
     Dispatch,
 } from "react";
 
-export const useDoubleTap = (): {
+export const useDoubleTap = (time: number = 250): {
     isDoubleTap: boolean;
     doubleTapHandler: () => void;
 } => {
@@ -23,7 +23,7 @@ export const useDoubleTap = (): {
         timer.current = setTimeout(() => {
             setTapCount(0);
             setDoubleTap(false);
-        }, 250);
+        }, time);
 
         const count = tapCount + 1;
         setTapCount(count);

@@ -26,8 +26,9 @@ export default function RootLayout() {
         <AppContextProvider>
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="(screens)/camera" options={{ headerShown: false }} />
             </Stack>
-            <StatusBar style="auto" />
+            <StatusBar style="light" />
         </AppContextProvider>
     );
 }

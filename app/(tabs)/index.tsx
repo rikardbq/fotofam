@@ -1,61 +1,118 @@
+import { Post } from "@/components/post/Post";
 import { AppContext } from "@/context/AppContext";
 import { useContext, useEffect, useState } from "react";
-import { Button, Image, Text, TouchableOpacity, View } from "react-native";
-import { useImageService } from "@/hooks/useService";
+import {
+    Button,
+    Dimensions,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import Animated from "react-native-reanimated";
+import Constants from "expo-constants";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BaseContainer } from "@/components/container/BaseContainer";
+import { ScrollContainer } from "@/components/container/ScrollContainer";
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function Index(props: any) {
-    console.log(props);
+    const insets = useSafeAreaInsets();
     const { useStore } = useContext(AppContext);
     const [state, dispatch] = useStore();
-    const imageService = useImageService([state, dispatch]);
+
     const {
-        image: { currentPhoto },
+        image: { currentPhoto, croppedPhoto },
     } = state;
 
     useEffect(() => {
-        console.log(currentPhoto);
-        console.log("after currentphoto change ", imageService);
-    }, [imageService]);
+        console.log("wasup", currentPhoto);
+    }, [state]);
 
-    const [tex, setTex] = useState("");
+    const testHeight = Dimensions.get("window").height * 0.75;
 
-    // const getData = () => {
-    //     services.imageService.getAllImages();
-    //     axios
-    //         .get("http://192.168.0.22:8081/greeting", {
-    //             headers: { "Content-Type": "application/json", "Accept": "application/json" }
-    //         })
-    //         .then((a) => {
-    //             console.log("hello");
-    //             console.log(a.status);
-    //             setTex(JSON.stringify(a.data));
-    //         })
-    //         .catch((e) => console.log(JSON.stringify(e)));
-    // };
-
-    // console.log(tex);
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: "#000",
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+        },
+        content: {
+            flex: 1,
+            padding: 12,
+            gap: 16,
+            overflow: "hidden",
+        },
+    });
 
     return (
-        <>
-            <Image
-                src={`file://${currentPhoto}`}
-                style={{ width: "100%", height: "60%", objectFit: "contain" }}
-            />
-            <Button title="hello" onPress={() => setTex("asdasdasd")} />
-            <Image
-                src={`file://${imageService.getCurrentPhoto()}`}
-                style={{ width: "100%", height: "60%", objectFit: "contain" }}
-            />
-            <Text>{tex}</Text>
-            {/* <View
-            style={{
-                flex: 1,
-                // justifyContent: "center",
-                alignItems: "center",
-            }}
-        >
-            <Text>Edit app/index.tsx to edit this screen.</Text>
-        </View> */}
-        </>
+        <BaseContainer>
+            {/* <Image
+                src={`file://${croppedPhoto.path}`}
+                style={{
+                    width: Dimensions.get("window").width,
+                    aspectRatio: 1 / 1,
+                    resizeMode: "contain",
+                }}
+            /> */}
+            <ScrollContainer>
+                <Post
+                    imageProps={{
+                        src: `file://${croppedPhoto.path}`,
+                        height: croppedPhoto.height,
+                        width: croppedPhoto.width,
+                    }}
+                />
+                <Post
+                    imageProps={{
+                        src: `file://${croppedPhoto.path}`,
+                        height: croppedPhoto.height,
+                        width: croppedPhoto.width,
+                    }}
+                />
+                <Post
+                    imageProps={{
+                        src: `file://${croppedPhoto.path}`,
+                        height: croppedPhoto.height,
+                        width: croppedPhoto.width,
+                    }}
+                />
+                <Post
+                    imageProps={{
+                        src: `file://${croppedPhoto.path}`,
+                        height: croppedPhoto.height,
+                        width: croppedPhoto.width,
+                    }}
+                />
+                <Post
+                    imageProps={{
+                        src: `file://${croppedPhoto.path}`,
+                        height: croppedPhoto.height,
+                        width: croppedPhoto.width,
+                    }}
+                />
+                <Post
+                    imageProps={{
+                        src: `file://${croppedPhoto.path}`,
+                        height: croppedPhoto.height,
+                        width: croppedPhoto.width,
+                    }}
+                />
+                {/* <Image
+                    // source={{ uri: currentPhoto }} // used for blob object url
+                    src={`file://${currentPhoto}`}
+                    style={{
+                        // width: Dimensions.get("window").width,
+                        height: Dimensions.get("window").height * 0.8,
+                        backgroundColor: "blue",
+                        objectFit: "contain",
+                    }}
+                /> */}
+            </ScrollContainer>
+        </BaseContainer>
     );
 }

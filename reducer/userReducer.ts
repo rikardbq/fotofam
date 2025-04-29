@@ -26,9 +26,10 @@ const reducer = (state: UserState, action: Action) => {
                 currentUser: action.data.value,
             };
         }
-        default: {
-            return state;
-        }
+        // remember to check if i need this
+        // default: {
+        //     return state;
+        // }
     }
 };
 

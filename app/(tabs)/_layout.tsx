@@ -1,11 +1,16 @@
 import { useImageService } from "@/hooks/useService";
 import { useStore } from "@/hooks/useStore";
 import { Tabs } from "expo-router";
-import React, { useEffect } from "react";
-import { Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, Platform, StyleSheet, Text, View } from "react-native";
+import FA5ICONS from "@expo/vector-icons/FontAwesome5";
+import IONICONS from "@expo/vector-icons/Ionicons";
+import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { TabBar } from "@/components/tab/TabBar";
 
 export default function TabLayout() {
     const store = useStore();
+    const [photos, setPhotos] = useState<any[]>([]);
     const imageService = useImageService(store);
 
     // populate store with images for logged in user at this level
@@ -17,7 +22,6 @@ export default function TabLayout() {
             // some cleanup
         };
     }, []);
-
 
     // possible to later implement a refresh hook whose state is
     // the current start-press / end-press delta in pixels > threshold = refresh
@@ -33,33 +37,78 @@ export default function TabLayout() {
         if (shouldRefresh) (async () => await imageService.getAllImages())();
     }, [shouldRefresh]);
     */
+    const st = StyleSheet.create({
+        bar: {
+            backgroundColor: "#000",
+            borderColor: "#fff",
+        },
+        inner: {
+            color: "#fff",
+        },
+    });
 
     return (
         <Tabs
+            tabBar={(props: BottomTabBarProps) => <TabBar {...props} />}
+            backBehavior="firstRoute"
             screenOptions={{
-                tabBarActiveTintColor: "#e3e3e3",
+                tabBarActiveTintColor: "#fff",
+                tabBarActiveBackgroundColor: "#000",
+                tabBarInactiveBackgroundColor: "#000",
                 headerShown: false,
                 tabBarStyle: Platform.select({
                     ios: {
                         // Use a transparent background on iOS to show the blur effect
+                        // position: "absolute",
                         position: "absolute",
                     },
-                    default: {},
+                    default: {
+                        border: 0,
+                        borderColor: "#000",
+                    },
                 }),
             }}
         >
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: "Home",
+                    title: "Feed",
+                    tabBarIcon: ({ color }) => (
+                        <IONICONS name="albums" size={24} color={color} />
+                    ),
                 }}
             />
             <Tabs.Screen
-                name="camera"
+                name="add_post"
                 options={{
-                    title: "Camera",
+                    title: "Add post",
+                    tabBarIcon: ({ color }) => (
+                        <FA5ICONS name="plus-square" size={24} color={color} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
+                name="personal"
+                options={{
+                    title: "Personal",
+                    tabBarIcon: ({ color }) => (
+                        <Test />
+                        // <FA5ICONS
+                        //     name="user-alt"
+                        //     size={24}
+                        //     color={color}
+                        // />
+                    ),
                 }}
             />
         </Tabs>
     );
 }
+
+// some test just to see what a personal icon for the users space would look like
+const Test = ({ focused, color, size }: any) => (
+    <Image
+        source={require("../../123.jpg")}
+        style={{ width: 24, height: 24, borderRadius: 12 }}
+    />
+);

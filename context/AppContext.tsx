@@ -5,17 +5,37 @@ import { rootReducer, initialState } from "@/reducer";
 import image from "@/reducer/imageReducer";
 import ImageService from "@/service/ImageService";
 import { useStore } from "@/hooks/useStore";
+import { useDoubleTap } from "@/hooks/useDoubleTap";
+import {
+    useNavigation,
+    ParamListBase,
+    NavigationProp,
+} from "@react-navigation/native";
+import { useI18N } from "@/hooks/useI18N";
+import { I18NKeys, I18NBase, languages } from "@/i18n";
 // import { useService } from "@/hooks/useService";
 
 type AppContextDefaultState = {
-    useStore: any;
+    useStore: () => any[];
+    useDoubleTap: () => {
+        isDoubleTap: boolean;
+        doubleTapHandler: () => void;
+    };
+    useNavigation: () => NavigationProp<ParamListBase>;
+    useLocalization: () => I18NBase;
     // useService: any;
 };
 
-export const AppContext: React.Context<AppContextDefaultState> = createContext({
-    useStore: null,
-    // useService: null,
-});
+export const AppContext: React.Context<AppContextDefaultState> =
+    createContext<AppContextDefaultState>({
+        useStore: () => [],
+        useDoubleTap: () => ({
+            isDoubleTap: false,
+            doubleTapHandler: () => {},
+        }),
+        useNavigation: () => ({} as NavigationProp<ParamListBase>),
+        useLocalization: () => ({} as I18NBase),
+    });
 
 type AppContextProviderProps = {
     children: React.ReactNode;
@@ -42,6 +62,9 @@ type AppContextProviderProps = {
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const store = useStore();
+    const doubleTap = useDoubleTap();
+    const navigation: NavigationProp<ParamListBase> = useNavigation();
+    const localization = useI18N(languages.swedish);
     // const services = useService(store);
     // const service = useMemo(() => {
     //     console.log("asdasdasdasd");
@@ -76,6 +99,9 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         <AppContext.Provider
             value={{
                 useStore: () => store,
+                useDoubleTap: () => doubleTap,
+                useNavigation: () => navigation,
+                useLocalization: () => localization,
             }}
         >
             {children}
