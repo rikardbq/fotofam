@@ -41,8 +41,13 @@ export default function CameraTab() {
     const [frameHeight, setFrameHeight] = useState(0);
     const [contentHeight, setContentHeight] = useState(0);
     const [albums, setAlbums] = useState<MediaLibrary.Album[]>([]);
-    const [photos, setPhotos] = useState<(MediaLibrary.Asset & { hidden?: boolean})[]>([]);
-    let photosMemo = useMemo<MediaLibrary.Asset[]>(() => photos, [inViewMap.current]);
+    const [photos, setPhotos] = useState<
+        (MediaLibrary.Asset & { hidden?: boolean })[]
+    >([]);
+    let photosMemo = useMemo<MediaLibrary.Asset[]>(
+        () => photos,
+        [inViewMap.current]
+    );
     const [photosCursor, setPhotosCursor] = useState("");
     const [permissionResponse, requestPermission] =
         MediaLibrary.usePermissions();
@@ -156,7 +161,6 @@ export default function CameraTab() {
 
     useEffect(() => {
         console.log("changed");
-        
     }, [inViewMap.current]);
 
     // TODO
@@ -202,20 +206,22 @@ export default function CameraTab() {
                     // })
 
                     // THIS WORKS, keeps a "window" of visible items based on item Y and height value relative to scrollY of the scrollView
-                    const off =
-                        e.nativeEvent.contentOffset.y;
+                    const off = e.nativeEvent.contentOffset.y;
+                    const extraMargin = frameHeight * 2;
                     itemsMap.current.forEach(({ id, h, y }, idx) => {
                         inViewMap.current[id] = {
-                            hidden: y + h < off || off + frameHeight < y,
+                            hidden:
+                                y + h + extraMargin < off ||
+                                off + extraMargin < y,
                         };
                     });
-                    
+
                     setPhotos(
-                        photos.map(p => ({
+                        photos.map((p) => ({
                             ...p,
-                            hidden: inViewMap.current[p.id].hidden
-                        })
-                    ));
+                            hidden: inViewMap.current[p.id].hidden,
+                        }))
+                    );
                     // itemsMap.forEach(([k, v]: [k: string, v: any]) => {
                     //     console.log(v);
                     // });
