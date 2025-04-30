@@ -3,6 +3,7 @@ import {
     useContext,
     useEffect,
     useMemo,
+    useReducer,
     useRef,
     useState,
 } from "react";
@@ -34,16 +35,18 @@ import { ScrollContainer } from "@/components/container/ScrollContainer";
 import * as MediaLibrary from "expo-media-library";
 
 export default function CameraTab() {
+    const [, forceUpdate] = useReducer(x => !x, false);
     const [offsetY, setOffsetY] = useState(0);
     const imageRefs: MutableRefObject<any[]> = useRef([]);
     const inViewMap: MutableRefObject<any> = useRef({});
-    const itemsMap: MutableRefObject<any[]> = useRef([]);
+    const itemsMap: MutableRefObject<any> = useRef({});
     const [frameHeight, setFrameHeight] = useState(0);
     const [contentHeight, setContentHeight] = useState(0);
     const [albums, setAlbums] = useState<MediaLibrary.Album[]>([]);
     const [photos, setPhotos] = useState<
         (MediaLibrary.Asset & { hidden?: boolean })[]
     >([]);
+    const [photosInViewSnapshot, setPhotosInViewSnapshot] = useState<any>({});
     let photosMemo = useMemo<MediaLibrary.Asset[]>(
         () => photos,
         [inViewMap.current]
@@ -198,44 +201,39 @@ export default function CameraTab() {
                     // }
                 }}
                 onScroll={async (e) => {
-                    const offsetY = e.nativeEvent.contentOffset.y;
                     // setOffsetY(offsetY);
                     // // setInViewMap({
                     // //     ...inViewMap,
 
                     // })
 
-                    // THIS WORKS, keeps a "window" of visible items based on item Y and height value relative to scrollY of the scrollView
-                    const off = e.nativeEvent.contentOffset.y;
+                    // THIS WORKS, keeps a "window" of visible items based on item Y and height value relative to scrollY of the scrollView.
+                    // replicate this function as a handler to use in the feed display for the exact same reason, where an infinite scroll should be possible without lagging too much.
+                    const offsetY = e.nativeEvent.contentOffset.y;
                     const extraMargin = frameHeight * 2;
-                    itemsMap.current.forEach(({ id, h, y }, idx) => {
-                        inViewMap.current[id] = {
-                            hidden:
-                                y + h + extraMargin < off ||
-                                off + extraMargin < y,
-                        };
+                    // const snapshot = itemsMap.current.reduce((acc, { id, h, y }) => ({
+                    //     ...acc,
+                    //     [id]:
+                    //         y + h + extraMargin < offsetY ||
+                    //         offsetY + extraMargin < y,
+                    // }), {});
+                    // setPhotosInViewSnapshot(
+                    //     snapshot
+                    // );
+
+                    // this solution has better performance..
+                    Object.entries(itemsMap.current).forEach(([k, { h, y }]: [k: string, v: any]) => {
+                        inViewMap.current[k] =
+                            y + h + extraMargin < offsetY ||
+                            offsetY + extraMargin < y;
                     });
-
-                    setPhotos(
-                        photos.map((p) => ({
-                            ...p,
-                            hidden: inViewMap.current[p.id].hidden,
-                        }))
-                    );
-                    // itemsMap.forEach(([k, v]: [k: string, v: any]) => {
-                    //     console.log(v);
-                    // });
-                    // console.log();
-                    // console.log(contentHeight - frameHeight);
-
-                    // maybe do something with some array window, not sure how to do this yet
-                    // current solution just eats too much memory and breaks down after some fetches
-
-                    // imageRefs.current.forEach((x) => {
-                    //     console.log(x.el.getBoundingClientRect());
-
-                    //     checkInView(x.id, x.idx);
-                    // });
+                    forceUpdate();
+                    // setPhotos(
+                    //     photos.map((p) => ({
+                    //         ...p,
+                    //         hidden: inViewMap.current[p.id],
+                    //     }))
+                    // );
 
                     if (offsetY + 300 > contentHeight - frameHeight) {
                         const assets = await MediaLibrary.getAssetsAsync({
@@ -271,13 +269,12 @@ export default function CameraTab() {
                     />
                 </TouchableOpacity> */}
                 {(photos?.length ?? 0) > 0 &&
-                    photos?.map((p: MediaLibrary.Asset, idx: number) => {
-                        return inViewMap.current[p.id] &&
-                            inViewMap.current[p.id].hidden ? (
+                    photos?.map((p, idx: number) => {
+                        return inViewMap.current[p.id] ? (
                             <View
                                 key={p.id}
                                 style={{
-                                    backgroundColor: "coral",
+                                    // backgroundColor: "coral",
                                     height: 117,
                                     width:
                                         (Dimensions.get("window").width - 8) /
@@ -287,15 +284,11 @@ export default function CameraTab() {
                         ) : (
                             <TouchableOpacity
                                 onLayout={(e) => {
-                                    itemsMap.current.push({
-                                        id: p.id,
+                                    itemsMap.current[p.id] = {
                                         y:
                                             e.nativeEvent.layout.y -
                                             (insets.top + 6),
                                         h: e.nativeEvent.layout.height,
-                                    });
-                                    inViewMap.current[p.id] = {
-                                        hidden: false,
                                     };
                                 }}
                                 key={p.id}
