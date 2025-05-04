@@ -27,6 +27,7 @@ export default function RootLayout() {
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="(screens)/camera" options={{ headerShown: false }} />
+                <Stack.Screen name="(screens)/component_test" options={{ headerShown: false }} />
             </Stack>
             <StatusBar style="light" />
         </AppContextProvider>

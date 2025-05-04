@@ -1,8 +1,15 @@
 ## TODO
 
-- [ ] manage images from camera roll to be loaded on demand
-    - [ ] if image container is considered out of view for more than 1s then replace the content with a simple placeholder view
-    - [ ] as the image container is brought back into view (any %), immediately show it again.
+- [ ] Login screen
+    - [ ] make use of the login flow
+- [x] use localstorage
+    - [x] refresh token
+    - [ ] store images by posts id. A post looks at storage before asking for its image from the DB
+    - [ ] never fetch / refetch posts unless first load or manually called refresh
+
+- [x] manage images from camera roll to be loaded on demand
+    - [x] if image container is considered out of view for more than 1s then replace the content with a simple placeholder view
+    - [x] as the image container is brought back into view (any %), immediately show it again.
 
 - caching (wait with this)
     - store the images in localstorage / sqlite
@@ -29,12 +36,14 @@
 - [ ] design a layout
     - [x] design a bottom bar (feed screen | camera screen | personal screen)
     - [x] (wip) make a feed screen
-        - [ ] (wip) 1 image post per screen-fill
+        - [x] 1/1 ratio image posts
         - [ ] (wip) scroll down to lazy load more posts
     - [ ] mock personal screen
+        - [ ] header flex-row = profile pic circle + real name, under the real name but still right of circle the username
         - [ ] 2 image wide grid of posts, only show image
             - click on image to load the post as its own sub-screen of personal screen
-    - [ ] camera screen
+            - above images in a small tab bar-esque thing there's a button for bookmarked posts to scroll through, looks like personal image viewer
+    - [x] camera screen
         - [ ] design camera UI
             - [ ] take photo design
             - [ ] __(THIS WILL REQUIRE A REAL REFACTOR OF THE DB SERVER POSSIBLY)__ record video design

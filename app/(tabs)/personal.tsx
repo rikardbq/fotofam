@@ -42,13 +42,14 @@ created_at = photos[photos.length - 1]?.created_at ?? 0;
 
 export default function Index(props: any) {
     console.log(props);
-    const { useStore } = useContext(AppContext);
+    const { useStore, useNavigation } = useContext(AppContext);
     const [state, dispatch] = useStore();
     const imageService = useImageService([state, dispatch]);
     const {
         image: { photos },
     } = state;
     const i18n = useI18N(languages.swedish);
+    const nav = useNavigation();
 
     const [tex, setTex] = useState("");
 
@@ -68,7 +69,7 @@ export default function Index(props: any) {
 
     return (
         <ScrollContainer>
-            <LocalizedButton label="label.previous" onPress={() => getData()} />
+            <LocalizedButton label="label.previous" onPress={() => nav.navigate("(screens)/component_test")} />
             <Button title={i18n["label.next"]} onPress={() => getData()} />
             {photos.map((photo: any) => (
                 <Image

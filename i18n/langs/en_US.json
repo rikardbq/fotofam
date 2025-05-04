@@ -1,4 +1,8 @@
 {
     "label.next": "Next",
-    "label.previous": "Previous"
+    "label.previous": "Previous",
+    "label.send": "Send",
+    "label.authenticate": "Authenticate",
+    "label.authorize": "Authorize",
+    "label.login": "Log in"
 }

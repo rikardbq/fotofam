@@ -1,4 +1,8 @@
 {
     "label.next": "",
-    "label.previous": ""
+    "label.previous": "",
+    "label.send": "",
+    "label.authenticate": "",
+    "label.authorize": "",
+    "label.login": ""
 }

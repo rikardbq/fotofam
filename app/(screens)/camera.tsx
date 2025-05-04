@@ -22,7 +22,7 @@ import { post } from "@/api";
 import axios from "axios";
 import { openCropper } from "react-native-image-crop-picker";
 
-export default function CameraTab() {
+export default () => {
     const camera = useRef<Camera>(null);
     const device = useCameraDevice("back");
     const screenAspectRatio =
@@ -181,7 +181,7 @@ export default function CameraTab() {
     const postData2 = async (data: any) => {
         console.log(data.length);
 
-        return await axios.post("http://192.168.0.22:8082/images_2", data, {
+        return await axios.post("http://192.168.0.22:8082/images", data, {
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json",

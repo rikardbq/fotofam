@@ -1,4 +1,8 @@
 {
     "label.next": "Nästa",
-    "label.previous": "Föregående"
+    "label.previous": "Föregående",
+    "label.send": "Skicka",
+    "label.authenticate": "Autentisera",
+    "label.authorize": "Auktorisera",
+    "label.login": "Logga in"
 }

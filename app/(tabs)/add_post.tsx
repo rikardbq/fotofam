@@ -170,7 +170,8 @@ export default function CameraTab() {
     // add a complete camera screen to make navigation to and from camera better and also to make the camera layout and ui design live in 1 place as one screen.
     return (
         <BaseContainer>
-            {/* <Image
+            <Image
+            // fadeDuration={0}
                 // src={`file://${state.image.currentPhoto.path}`}
                 source={{ uri: state.image.currentPhoto.path }}
                 style={{
@@ -178,7 +179,7 @@ export default function CameraTab() {
                     width: Dimensions.get("window").width,
                     resizeMode: "contain",
                 }}
-            /> */}
+            />
             <ScrollContainer
                 style={styles.scroll_container}
                 onLayout={(e) => {
@@ -200,51 +201,28 @@ export default function CameraTab() {
                     //   this.yOffset = maxOffset;
                     // }
                 }}
-                onScroll={async (e) => {
-                    // setOffsetY(offsetY);
-                    // // setInViewMap({
-                    // //     ...inViewMap,
-
-                    // })
-
-                    // THIS WORKS, keeps a "window" of visible items based on item Y and height value relative to scrollY of the scrollView.
-                    // replicate this function as a handler to use in the feed display for the exact same reason, where an infinite scroll should be possible without lagging too much.
+                onScroll={(e) => {
                     const offsetY = e.nativeEvent.contentOffset.y;
                     const extraMargin = frameHeight * 2;
-                    // const snapshot = itemsMap.current.reduce((acc, { id, h, y }) => ({
-                    //     ...acc,
-                    //     [id]:
-                    //         y + h + extraMargin < offsetY ||
-                    //         offsetY + extraMargin < y,
-                    // }), {});
-                    // setPhotosInViewSnapshot(
-                    //     snapshot
-                    // );
-
-                    // this solution has better performance..
+                    
                     Object.entries(itemsMap.current).forEach(([k, { h, y }]: [k: string, v: any]) => {
                         inViewMap.current[k] =
                             y + h + extraMargin < offsetY ||
                             offsetY + extraMargin < y;
                     });
                     forceUpdate();
-                    // setPhotos(
-                    //     photos.map((p) => ({
-                    //         ...p,
-                    //         hidden: inViewMap.current[p.id],
-                    //     }))
-                    // );
-
+                    
                     if (offsetY + 300 > contentHeight - frameHeight) {
-                        const assets = await MediaLibrary.getAssetsAsync({
+                        MediaLibrary.getAssetsAsync({
                             first: 40,
                             after: photosCursor,
                             mediaType: "photo",
                             sortBy: "modificationTime",
+                        }).then(assets => {
+                            setPhotosCursor(assets.endCursor);
+                            // photosMemo = [...photos, ...assets.assets];
+                            setPhotos([...photos, ...assets.assets]);
                         });
-                        setPhotosCursor(assets.endCursor);
-                        // photosMemo = [...photos, ...assets.assets];
-                        setPhotos([...photos, ...assets.assets]);
                     }
                 }}
                 onScrollEndDrag={(e) => {
@@ -253,7 +231,7 @@ export default function CameraTab() {
                 }}
                 scrollEventThrottle={16}
             >
-                {/* <TouchableOpacity
+                <TouchableOpacity
                     onPress={() => {
                         navigation.navigate("(screens)/camera");
                     }}
@@ -267,14 +245,14 @@ export default function CameraTab() {
                         size={(Dimensions.get("window").width - 8) / 3}
                         color="white"
                     />
-                </TouchableOpacity> */}
+                </TouchableOpacity>
                 {(photos?.length ?? 0) > 0 &&
                     photos?.map((p, idx: number) => {
                         return inViewMap.current[p.id] ? (
                             <View
                                 key={p.id}
                                 style={{
-                                    // backgroundColor: "coral",
+                                    backgroundColor: "#242424",
                                     height: 117,
                                     width:
                                         (Dimensions.get("window").width - 8) /
@@ -308,7 +286,9 @@ export default function CameraTab() {
                                 <Image
                                     source={{ uri: p.uri }}
                                     resizeMethod="resize"
+                                    // fadeDuration={1}
                                     style={{
+                                        backgroundColor: "#242424",
                                         // display: idx > 40 ? "none" : "flex",
                                         aspectRatio: 1 / 1,
                                         width:
