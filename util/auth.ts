@@ -1,3 +1,4 @@
+import { AuthHeaders } from "@/api";
 import { Buffer } from "buffer";
 
 const generateCharFromCodeRange = (min: number = 33, max: number = 126) => {
@@ -27,6 +28,10 @@ const splicePassword = (password: string) => {
 export const encodePassword = (password: string) => {
     return Buffer.from(splicePassword(password), "utf-8").toString("base64");
 };
+
+export const getAuthHeader = (token: string): AuthHeaders => ({
+    Authorization: `Bearer ${token}`
+});
 
 // const unSplicePassword = (spliced: string) => {
 //     return spliced

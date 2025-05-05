@@ -4,17 +4,27 @@ import { ScrollContainer } from "@/components/container/ScrollContainer";
 import BouncingDots from "@/components/loading/BouncingDots";
 import Spinner from "@/components/loading/Spinner";
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { View, Animated, StyleSheet, Text, TextInput } from "react-native";
 import { getItemAsync, setItemAsync } from "expo-secure-store";
 import { encodePassword } from "@/util/auth";
+import { useAuthService } from "@/hooks/useService";
+import { AppContext } from "@/context/AppContext";
 
 export default () => {
     const [username, onChangeUsername] = useState("");
     const [password, onChangePassword] = useState("");
     const [at, setAt] = useState("");
     const [rt, setRt] = useState("");
+    const { useAuthService } = useContext(AppContext);
+    const authService = useAuthService();
     const someRandomAppID = "FFFE"; // this will live in some JSON or other file where it can be imported from, generated once and kept safe to maintain token validity for all tokens issued for this app, backend checks against registered client apps
+
+    const handleLoginFlow = async (body: any) => {
+        const rt = await authService.authenticate(body);
+        const resp = await authService.login(rt);
+        console.log(resp);
+    };
 
     const authenticate = (data: any) => {
         axios
@@ -35,8 +45,6 @@ export default () => {
     };
 
     const authorize = () => {
-        console.log(at);
-
         axios
             .post("http://192.168.0.22:8082/authorize", undefined, {
                 headers: {
@@ -113,6 +121,17 @@ export default () => {
                     <LocalizedButton
                         label="label.login"
                         onPress={() => login()}
+                    />
+                    <LocalizedButton
+                        label="Handle login flow"
+                        onPress={() => {
+                            // login();
+                            handleLoginFlow({
+                                applicationId: someRandomAppID,
+                                username,
+                                password: encodePassword(password),
+                            });
+                        }}
                     />
                 </View>
             </ScrollContainer>

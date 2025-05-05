@@ -12,6 +12,10 @@ export default function RootLayout() {
         SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     });
 
+    // basically check the secureStorage for "auth_t" token. if found, try login with it
+    // server responds with new token if in need of refresh
+    useEffect(() => {}, []);
+
     useEffect(() => {
         if (loaded) {
             SplashScreen.hideAsync();
@@ -22,12 +26,20 @@ export default function RootLayout() {
         return null;
     }
 
+
+    // figure out what the structure should be here
     return (
         <AppContextProvider>
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="(screens)/camera" options={{ headerShown: false }} />
-                <Stack.Screen name="(screens)/component_test" options={{ headerShown: false }} />
+                <Stack.Screen
+                    name="(screens)/camera"
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="(screens)/component_test"
+                    options={{ headerShown: false }}
+                />
             </Stack>
             <StatusBar style="light" />
         </AppContextProvider>

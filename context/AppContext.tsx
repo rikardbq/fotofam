@@ -13,28 +13,21 @@ import {
 } from "@react-navigation/native";
 import { useI18N } from "@/hooks/useI18N";
 import { I18NKeys, I18NBase, languages } from "@/i18n";
+import AuthService from "@/service/AuthService";
+import { useAuthService } from "@/hooks/useService";
 // import { useService } from "@/hooks/useService";
 
 type AppContextDefaultState = {
     useStore: () => any[];
-    useDoubleTap: () => {
-        isDoubleTap: boolean;
-        doubleTapHandler: () => void;
-    };
-    useNavigation: () => NavigationProp<ParamListBase>;
     useLocalization: () => I18NBase;
-    // useService: any;
+    useAuthService: () => AuthService;
 };
 
 export const AppContext: React.Context<AppContextDefaultState> =
     createContext<AppContextDefaultState>({
         useStore: () => [],
-        useDoubleTap: () => ({
-            isDoubleTap: false,
-            doubleTapHandler: () => {},
-        }),
-        useNavigation: () => ({} as NavigationProp<ParamListBase>),
         useLocalization: () => ({} as I18NBase),
+        useAuthService: () => ({} as AuthService),
     });
 
 type AppContextProviderProps = {
@@ -62,9 +55,8 @@ type AppContextProviderProps = {
 
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     const store = useStore();
-    const doubleTap = useDoubleTap();
-    const navigation: NavigationProp<ParamListBase> = useNavigation();
     const localization = useI18N(languages.swedish);
+    const authService = useAuthService(store);
     // const services = useService(store);
     // const service = useMemo(() => {
     //     console.log("asdasdasdasd");
@@ -99,9 +91,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
         <AppContext.Provider
             value={{
                 useStore: () => store,
-                useDoubleTap: () => doubleTap,
-                useNavigation: () => navigation,
                 useLocalization: () => localization,
+                useAuthService: () => authService,
             }}
         >
             {children}

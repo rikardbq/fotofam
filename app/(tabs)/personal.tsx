@@ -15,6 +15,7 @@ import { useI18N } from "@/hooks/useI18N";
 import { languages } from "@/i18n";
 import LocalizedButton from "@/components/buttons/i18n/LocalizedButton";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
+import { useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
     container: {
@@ -42,7 +43,7 @@ created_at = photos[photos.length - 1]?.created_at ?? 0;
 
 export default function Index(props: any) {
     console.log(props);
-    const { useStore, useNavigation } = useContext(AppContext);
+    const { useStore } = useContext(AppContext);
     const [state, dispatch] = useStore();
     const imageService = useImageService([state, dispatch]);
     const {

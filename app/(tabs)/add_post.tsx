@@ -33,9 +33,11 @@ import FA5ICONS from "@expo/vector-icons/FontAwesome5";
 import { BaseContainer } from "@/components/container/BaseContainer";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
 import * as MediaLibrary from "expo-media-library";
+import { useNavigation } from "@react-navigation/native";
+import { useDoubleTap } from "@/hooks/useDoubleTap";
 
 export default function CameraTab() {
-    const [, forceUpdate] = useReducer(x => !x, false);
+    const [, forceUpdate] = useReducer((x) => !x, false);
     const [offsetY, setOffsetY] = useState(0);
     const imageRefs: MutableRefObject<any[]> = useRef([]);
     const inViewMap: MutableRefObject<any> = useRef({});
@@ -74,7 +76,7 @@ export default function CameraTab() {
         requestPermission: requestMicPermission,
     } = useMicrophonePermission();
     const [isInit, setInit] = useState(false);
-    const { useStore, useDoubleTap, useNavigation } = useContext(AppContext);
+    const { useStore } = useContext(AppContext);
     const [state, dispatch] = useStore();
     const { isDoubleTap, doubleTapHandler } = useDoubleTap();
     // const [photos, getPhotos] = useCameraRoll();
@@ -171,7 +173,7 @@ export default function CameraTab() {
     return (
         <BaseContainer>
             <Image
-            // fadeDuration={0}
+                // fadeDuration={0}
                 // src={`file://${state.image.currentPhoto.path}`}
                 source={{ uri: state.image.currentPhoto.path }}
                 style={{
@@ -204,21 +206,23 @@ export default function CameraTab() {
                 onScroll={(e) => {
                     const offsetY = e.nativeEvent.contentOffset.y;
                     const extraMargin = frameHeight * 2;
-                    
-                    Object.entries(itemsMap.current).forEach(([k, { h, y }]: [k: string, v: any]) => {
-                        inViewMap.current[k] =
-                            y + h + extraMargin < offsetY ||
-                            offsetY + extraMargin < y;
-                    });
+
+                    Object.entries(itemsMap.current).forEach(
+                        ([k, { h, y }]: [k: string, v: any]) => {
+                            inViewMap.current[k] =
+                                y + h + extraMargin < offsetY ||
+                                offsetY + extraMargin < y;
+                        }
+                    );
                     forceUpdate();
-                    
+
                     if (offsetY + 300 > contentHeight - frameHeight) {
                         MediaLibrary.getAssetsAsync({
                             first: 40,
                             after: photosCursor,
                             mediaType: "photo",
                             sortBy: "modificationTime",
-                        }).then(assets => {
+                        }).then((assets) => {
                             setPhotosCursor(assets.endCursor);
                             // photosMemo = [...photos, ...assets.assets];
                             setPhotos([...photos, ...assets.assets]);
