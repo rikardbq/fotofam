@@ -15,7 +15,8 @@ import { useI18N } from "@/hooks/useI18N";
 import { languages } from "@/i18n";
 import LocalizedButton from "@/components/buttons/i18n/LocalizedButton";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@/hooks/useNavigation";
+// import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
     container: {

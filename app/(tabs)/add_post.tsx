@@ -33,8 +33,8 @@ import FA5ICONS from "@expo/vector-icons/FontAwesome5";
 import { BaseContainer } from "@/components/container/BaseContainer";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
 import * as MediaLibrary from "expo-media-library";
-import { useNavigation } from "@react-navigation/native";
 import { useDoubleTap } from "@/hooks/useDoubleTap";
+import { useNavigation } from "@/hooks/useNavigation";
 
 export default function CameraTab() {
     const [, forceUpdate] = useReducer((x) => !x, false);

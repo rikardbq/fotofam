@@ -1,7 +1,10 @@
 ## TODO
 
-- [ ] Login screen
-    - [ ] make use of the login flow
+- [ ] Auth
+    - [x] AuthService
+    - [ ] Handle token login during application onLoad
+    - [ ] Login screen
+
 - [x] use localstorage
     - [x] refresh token
     - [ ] store images by posts id. A post looks at storage before asking for its image from the DB
