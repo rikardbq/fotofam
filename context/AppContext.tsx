@@ -31,6 +31,8 @@ export const AppContext: React.Context<AppContextDefaultState> =
     });
 
 type AppContextProviderProps = {
+    store: any[],
+    authService: AuthService,
     children: React.ReactNode;
 };
 
@@ -53,10 +55,8 @@ type AppContextProviderProps = {
 //     return services;
 // };
 
-export const AppContextProvider = ({ children }: AppContextProviderProps) => {
-    const store = useStore();
+export const AppContextProvider = ({ store, authService, children }: AppContextProviderProps) => {
     const localization = useI18N(languages.swedish);
-    const authService = useAuthService(store);
     // const services = useService(store);
     // const service = useMemo(() => {
     //     console.log("asdasdasdasd");

@@ -11,15 +11,6 @@ export type AuthRequest = {
     password: string;
 };
 
-type TokenClaims = {
-    iss: string;
-    aud: string;
-    iat: number;
-    exp: number;
-    "x-uname": string;
-    "x-aid": string;
-};
-
 export default class AuthService {
     private dispatch: any;
     private state: any;
@@ -55,9 +46,6 @@ export default class AuthService {
                 undefined,
                 getAuthHeader(rt)
             );
-
-            // const decodedToken: TokenClaims = decodeJwt(token);
-            await setItemAsync("auth_t", token);
 
             return token;
             // dispatch set application state with username and extra things needed to conclude the login flow

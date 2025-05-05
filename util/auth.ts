@@ -33,6 +33,15 @@ export const getAuthHeader = (token: string): AuthHeaders => ({
     Authorization: `Bearer ${token}`
 });
 
+export type TokenClaims = {
+    iss: string;
+    aud: string;
+    iat: number;
+    exp: number;
+    "x-uname": string;
+    "x-aid": string;
+};
+
 // const unSplicePassword = (spliced: string) => {
 //     return spliced
 //         .split("")

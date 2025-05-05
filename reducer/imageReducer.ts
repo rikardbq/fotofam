@@ -63,9 +63,9 @@ const reducer = (state: ImageState, action: Action) => {
             };
         }
         // remember to check if i need this
-        // default: {
-        //     return state;
-        // }
+        default: {
+            return state;
+        }
     }
 
     // throw error in the event that we dont use combineReducer functionality
