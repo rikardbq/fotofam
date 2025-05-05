@@ -8,8 +8,8 @@ export default class ImageService {
 
     constructor([state, dispatch]: any) {
         this.dispatch = dispatch;
-        this.image = state?.image;
-        this.user = state?.user;
+        this.image = state.image;
+        this.user = state.user;
     }
 
     setImage(image: any) {
@@ -17,7 +17,7 @@ export default class ImageService {
     }
 
     getCurrentPhoto() {
-        return this.image?.currentPhoto;
+        return this.image.currentPhoto;
     }
 
     async getAllImages() {

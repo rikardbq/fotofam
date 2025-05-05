@@ -39,7 +39,7 @@
                     "image": "./assets/images/splash-icon.png",
                     "imageWidth": 200,
                     "resizeMode": "contain",
-                    "backgroundColor": "#ffffff"
+                    "backgroundColor": "#000000"
                 }
             ],
             [
@@ -68,6 +68,7 @@
             "eas": {
                 "projectId": "72606bea-ffb2-4620-8b44-ed9ff1d4515b"
             }
-        }
+        },
+        "backgroundColor": "#000000"
     }
 }

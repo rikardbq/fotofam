@@ -15,19 +15,23 @@ import Constants from "expo-constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BaseContainer } from "@/components/container/BaseContainer";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
+// import { useStore } from "@/hooks/useStore";
 const statusBarHeight = Constants.statusBarHeight;
 
-export default function Index(props: any) {
+export default (props: any) => {
     const insets = useSafeAreaInsets();
     const { useStore } = useContext(AppContext);
     const [state, dispatch] = useStore();
 
-    const {
-        image: { currentPhoto, croppedPhoto },
-    } = state;
+    // const {
+    //     image: { currentPhoto, croppedPhoto },
+    // } = state;
+    useEffect(() => {
+        console.log("STATE ---> ", state);
+    }, []);
 
     useEffect(() => {
-        console.log("wasup", currentPhoto);
+        console.log("wasup", state);
     }, [state]);
 
     const testHeight = Dimensions.get("window").height * 0.75;
@@ -62,44 +66,44 @@ export default function Index(props: any) {
             <ScrollContainer>
                 <Post
                     imageProps={{
-                        src: `file://${croppedPhoto.path}`,
-                        height: croppedPhoto.height,
-                        width: croppedPhoto.width,
+                        src: `file://${state.image.croppedPhoto.path}`,
+                        height: state.image.croppedPhoto.height,
+                        width: state.image.croppedPhoto.width,
                     }}
                 />
                 <Post
                     imageProps={{
-                        src: `file://${croppedPhoto.path}`,
-                        height: croppedPhoto.height,
-                        width: croppedPhoto.width,
+                        src: `file://${state.image.croppedPhoto.path}`,
+                        height: state.image.croppedPhoto.height,
+                        width: state.image.croppedPhoto.width,
                     }}
                 />
                 <Post
                     imageProps={{
-                        src: `file://${croppedPhoto.path}`,
-                        height: croppedPhoto.height,
-                        width: croppedPhoto.width,
+                        src: `file://${state.image.croppedPhoto.path}`,
+                        height: state.image.croppedPhoto.height,
+                        width: state.image.croppedPhoto.width,
                     }}
                 />
                 <Post
                     imageProps={{
-                        src: `file://${croppedPhoto.path}`,
-                        height: croppedPhoto.height,
-                        width: croppedPhoto.width,
+                        src: `file://${state.image.croppedPhoto.path}`,
+                        height: state.image.croppedPhoto.height,
+                        width: state.image.croppedPhoto.width,
                     }}
                 />
                 <Post
                     imageProps={{
-                        src: `file://${croppedPhoto.path}`,
-                        height: croppedPhoto.height,
-                        width: croppedPhoto.width,
+                        src: `file://${state.image.croppedPhoto.path}`,
+                        height: state.image.croppedPhoto.height,
+                        width: state.image.croppedPhoto.width,
                     }}
                 />
                 <Post
                     imageProps={{
-                        src: `file://${croppedPhoto.path}`,
-                        height: croppedPhoto.height,
-                        width: croppedPhoto.width,
+                        src: `file://${state.image.croppedPhoto.path}`,
+                        height: state.image.croppedPhoto.height,
+                        width: state.image.croppedPhoto.width,
                     }}
                 />
                 {/* <Image

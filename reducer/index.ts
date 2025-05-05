@@ -9,12 +9,9 @@ type Reducers = {
 
 export type Action = {
     type: string;
-    data: {
-        [key: string]: string;
-    };
 };
 
-const combineReducers = (slices: any) => (state: any, action: any) =>
+const combineReducers = (slices: Reducers) => (state: any, action: any) =>
     Object.keys(slices).reduce(
         (acc, prop) => ({
             ...acc,

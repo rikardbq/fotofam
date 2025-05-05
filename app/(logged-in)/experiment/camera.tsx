@@ -16,7 +16,7 @@ import {
     useCameraPermission,
     useMicrophonePermission,
 } from "react-native-vision-camera";
-import { useDoubleTap } from "../../hooks/useDoubleTap";
+import { useDoubleTap } from "../../../hooks/useDoubleTap";
 import { AppContext } from "@/context/AppContext";
 import { post } from "@/api";
 import axios from "axios";

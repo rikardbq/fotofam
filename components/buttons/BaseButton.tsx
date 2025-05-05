@@ -6,11 +6,12 @@ import {
 } from "react-native";
 
 type LocalizedButton = {
-    children?: React.ReactNode;
     label?: string;
     onPress?: (e: GestureResponderEvent) => void;
+    disabled?: boolean,
     underlayColor?: string;
     activeOpacity?: number;
+    children?: React.ReactNode;
 };
 
 const styles = StyleSheet.create({
@@ -33,12 +34,14 @@ const styles = StyleSheet.create({
 export default ({
     label,
     onPress,
+    disabled,
     underlayColor = "#4477ff",
     activeOpacity = 1,
     children,
 }: LocalizedButton) => {
     return (
         <TouchableHighlight
+            disabled={disabled}
             onPress={onPress}
             activeOpacity={activeOpacity}
             underlayColor={underlayColor}

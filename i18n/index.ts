@@ -3,7 +3,7 @@ import base from "./langs/base.json";
 export type I18NBase = typeof base;
 export type I18NKeys = keyof I18NBase;
 
-const mergeWithBase = (lang: Object) => ({
+const mergeWithBase = (lang: Record<string, any>) => ({
     ...base,
     ...lang,
 });

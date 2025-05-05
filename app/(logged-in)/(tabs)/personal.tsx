@@ -71,7 +71,7 @@ export default function Index(props: any) {
 
     return (
         <ScrollContainer>
-            <LocalizedButton label="label.previous" onPress={() => nav.navigate("(screens)/component_test")} />
+            <LocalizedButton label="label.previous" onPress={() => nav.navigate("experiment/component_test")} />
             <Button title={i18n["label.next"]} onPress={() => getData()} />
             {photos.map((photo: any) => (
                 <Image

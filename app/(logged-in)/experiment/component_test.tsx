@@ -10,6 +10,7 @@ import { getItemAsync, setItemAsync } from "expo-secure-store";
 import { encodePassword } from "@/util/auth";
 import { useAuthService } from "@/hooks/useService";
 import { AppContext } from "@/context/AppContext";
+import { useNavigation } from "@/hooks/useNavigation";
 
 export default () => {
     const [username, onChangeUsername] = useState("");
@@ -18,6 +19,7 @@ export default () => {
     const [rt, setRt] = useState("");
     const { useAuthService } = useContext(AppContext);
     const authService = useAuthService();
+    const navigation = useNavigation();
     const someRandomAppID = "FFFE"; // this will live in some JSON or other file where it can be imported from, generated once and kept safe to maintain token validity for all tokens issued for this app, backend checks against registered client apps
 
     const handleLoginFlow = async (body: any) => {
@@ -131,6 +133,12 @@ export default () => {
                                 username,
                                 password: encodePassword(password),
                             });
+                        }}
+                    />
+                    <LocalizedButton
+                        label="Logout"
+                        onPress={() => {
+                            authService.logout();
                         }}
                     />
                 </View>

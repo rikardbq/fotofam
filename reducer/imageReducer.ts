@@ -28,7 +28,7 @@ const initialState: ImageState = {
 
 type Action = RootAction & {
     data: {
-        value: any;
+        values: Record<string, any>;
     };
 };
 
@@ -40,9 +40,9 @@ const reducer = (state: ImageState, action: Action) => {
             return {
                 ...state,
                 currentPhoto: {
-                    path: action.data.value.path,
-                    width: action.data.value.width,
-                    height: action.data.value.height,
+                    path: action.data.values.path,
+                    width: action.data.values.width,
+                    height: action.data.values.height,
                 },
             };
         }
@@ -50,19 +50,18 @@ const reducer = (state: ImageState, action: Action) => {
             return {
                 ...state,
                 croppedPhoto: {
-                    path: action.data.value.path,
-                    width: action.data.value.width,
-                    height: action.data.value.height,
+                    path: action.data.values.path,
+                    width: action.data.values.width,
+                    height: action.data.values.height,
                 },
             };
         }
         case actions.SET_PHOTOS: {
             return {
                 ...state,
-                photos: action.data.value,
+                photos: action.data.values,
             };
         }
-        // remember to check if i need this
         default: {
             return state;
         }
