@@ -3,22 +3,20 @@ import { BaseContainer } from "@/components/container/BaseContainer";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
 import BouncingDots from "@/components/loading/BouncingDots";
 import Spinner from "@/components/loading/Spinner";
-import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { View, Animated, StyleSheet, Text, TextInput } from "react-native";
-import { getItemAsync, setItemAsync } from "expo-secure-store";
-import { encodePassword } from "@/util/auth";
-import { useAuthService } from "@/hooks/useService";
 import { AppContext } from "@/context/AppContext";
 import { useNavigation } from "@/hooks/useNavigation";
+import { encodePassword } from "@/util/auth";
+import axios from "axios";
+import { getItemAsync, setItemAsync } from "expo-secure-store";
+import React, { useContext, useState } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
 export default () => {
     const [username, onChangeUsername] = useState("");
     const [password, onChangePassword] = useState("");
     const [at, setAt] = useState("");
     const [rt, setRt] = useState("");
-    const { useAuthService } = useContext(AppContext);
-    const authService = useAuthService();
+    const { authService } = useContext(AppContext);
     const navigation = useNavigation();
     const someRandomAppID = "FFFE"; // this will live in some JSON or other file where it can be imported from, generated once and kept safe to maintain token validity for all tokens issued for this app, backend checks against registered client apps
 

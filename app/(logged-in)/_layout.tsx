@@ -4,11 +4,15 @@ import { Redirect, Stack } from "expo-router";
 import { AppContext } from "@/context/AppContext";
 
 export default () => {
-    const { useStore, useAuthService, useAuthToken } = useContext(AppContext);
-    const authToken = useAuthToken();
-    const [state, _] = useStore();
+    const { store, authService } = useContext(AppContext);
+    const authToken = authService.getAuthToken();
+    const [state, _] = store;
 
-    if (!state.user.loggedIn && authToken === null) {
+    if (
+        "user" in state &&
+        !state.user.loggedIn &&
+        authToken === null
+    ) {
         return <Redirect href="/login" />;
     }
 

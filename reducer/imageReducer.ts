@@ -6,7 +6,7 @@ const actions = {
     SET_PHOTOS: "SET_PHOTOS",
 };
 
-type ImageState = {
+export type ImageState = {
     currentPhoto: any;
     croppedPhoto: any;
     photos: any[];

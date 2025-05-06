@@ -11,8 +11,7 @@ import { ScrollContainer } from "@/components/container/ScrollContainer";
 
 export default () => {
     const router = useRouter();
-    const { useAuthService } = useContext(AppContext);
-    const authService = useAuthService();
+    const { authService } = useContext(AppContext);
 
     const [username, onChangeUsername] = useState<string | undefined>(
         undefined

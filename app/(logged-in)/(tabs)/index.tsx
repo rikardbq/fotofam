@@ -20,8 +20,8 @@ const statusBarHeight = Constants.statusBarHeight;
 
 export default (props: any) => {
     const insets = useSafeAreaInsets();
-    const { useStore } = useContext(AppContext);
-    const [state, dispatch] = useStore();
+    const { store } = useContext(AppContext);
+    const [state, dispatch] = store;
 
     // const {
     //     image: { currentPhoto, croppedPhoto },

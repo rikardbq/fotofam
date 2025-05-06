@@ -1,10 +1,13 @@
 import { useMemo, useReducer } from "react";
 
-import { rootReducer, initialState } from "@/reducer";
+import { rootReducer, initialState, Store } from "@/reducer";
 
 export const useStore = () => {
     const [state, dispatch] = useReducer(rootReducer, initialState);
-    const store = useMemo(() => [state, dispatch], [state]);
+    const store: Store = useMemo(
+        () => [state, dispatch],
+        [state]
+    );
 
     return store;
 };

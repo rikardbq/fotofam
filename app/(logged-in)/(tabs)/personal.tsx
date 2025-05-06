@@ -1,21 +1,13 @@
-import { AppContext } from "@/context/AppContext";
-import { useContext, useEffect, useState } from "react";
-import {
-    Button,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
-import { useImageService } from "@/hooks/useService";
-import axios from "axios";
-import Animated from "react-native-reanimated";
-import { useI18N } from "@/hooks/useI18N";
-import { languages } from "@/i18n";
 import LocalizedButton from "@/components/buttons/i18n/LocalizedButton";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
+import { AppContext } from "@/context/AppContext";
+import { useI18N } from "@/hooks/useI18N";
 import { useNavigation } from "@/hooks/useNavigation";
+import { useImageService } from "@/hooks/useService";
+import { languages } from "@/i18n";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Button, Image, StyleSheet } from "react-native";
 // import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
@@ -44,8 +36,8 @@ created_at = photos[photos.length - 1]?.created_at ?? 0;
 
 export default function Index(props: any) {
     console.log(props);
-    const { useStore } = useContext(AppContext);
-    const [state, dispatch] = useStore();
+    const { store } = useContext(AppContext);
+    const [state, dispatch] = store;
     const imageService = useImageService([state, dispatch]);
     const {
         image: { photos },
@@ -71,7 +63,10 @@ export default function Index(props: any) {
 
     return (
         <ScrollContainer>
-            <LocalizedButton label="label.previous" onPress={() => nav.navigate("experiment/component_test")} />
+            <LocalizedButton
+                label="label.previous"
+                onPress={() => nav.navigate("experiment/component_test")}
+            />
             <Button title={i18n["label.next"]} onPress={() => getData()} />
             {photos.map((photo: any) => (
                 <Image

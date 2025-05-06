@@ -17,8 +17,8 @@ export default function RootLayout() {
         SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     });
     const store = useStore();
-    const authService = useAuthService(store);
     const authToken = getItem("auth_t");
+    const authService = useAuthService(store, authToken);
 
     useEffect(() => {
         if (loaded) {
@@ -37,7 +37,7 @@ export default function RootLayout() {
     }
 
     return (
-        <AppContextProvider store={store} authService={authService} authToken={authToken}>
+        <AppContextProvider store={store} authService={authService}>
             <Stack screenOptions={{ headerShown: false }} />
             <StatusBar style="light" />
         </AppContextProvider>

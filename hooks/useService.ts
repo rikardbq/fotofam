@@ -1,6 +1,9 @@
+import { useMemo } from "react";
+
+import { Store } from "@/reducer";
+
 import AuthService from "@/service/AuthService";
 import ImageService from "@/service/ImageService";
-import { useMemo } from "react";
 
 const serviceNames = {
     AUTH_SERVICE: "AUTH_SERVICE",
@@ -9,26 +12,30 @@ const serviceNames = {
 };
 
 const services: { [key: string]: any } = {
-    AUTH_SERVICE: (store: any) => new AuthService(store),
-    IMAGE_SERVICE: (store: any) => new ImageService(store),
+    AUTH_SERVICE: (store: Store, authToken: string | null) =>
+        new AuthService(store, authToken),
+    IMAGE_SERVICE: (store: Store) => new ImageService(store),
     // USER_SERVICE: (store: any) => new UserService(store),
 };
 
-const getService = (store: any, serviceName: string) =>
-    services[serviceName](store);
+const getService = (serviceName: string, store: Store, ...extraArgs: any) =>
+    services[serviceName](store, ...extraArgs);
 
-export const useImageService = (store: any): ImageService => {
+export const useImageService = (store: Store): ImageService => {
     const service = useMemo(
-        () => getService(store, serviceNames.IMAGE_SERVICE),
+        () => getService(serviceNames.IMAGE_SERVICE, store),
         [store[0]]
     );
 
     return service;
 };
 
-export const useAuthService = (store: any): AuthService => {
+export const useAuthService = (
+    store: Store,
+    authToken: string | null
+): AuthService => {
     const service = useMemo(
-        () => getService(store, serviceNames.AUTH_SERVICE),
+        () => getService(serviceNames.AUTH_SERVICE, store, authToken),
         [store[0]]
     );
 

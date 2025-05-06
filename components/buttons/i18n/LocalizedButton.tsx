@@ -11,8 +11,7 @@ type LocalizedButton = {
 };
 
 export default ({ label, onPress, disabled }: LocalizedButton) => {
-    const { useLocalization } = useContext(AppContext);
-    const i18n = useLocalization();
+    const { localization: i18n } = useContext(AppContext);
 
     return <BaseButton disabled={disabled} onPress={onPress} label={i18n[label as I18NKeys] ?? label} />;
 };

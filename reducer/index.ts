@@ -1,17 +1,26 @@
-import image from "@/reducer/imageReducer";
-import user from "@/reducer/userReducer";
+import image, { ImageState } from "@/reducer/imageReducer";
+import user, { UserState } from "@/reducer/userReducer";
 
 type Reducers = {
     image: typeof image.reducer;
     user: typeof user.reducer;
-    [key: string]: any;
+    [x: string]: any;
 };
 
 export type Action = {
     type: string;
+    data: Record<string, any>
 };
 
-const combineReducers = (slices: Reducers) => (state: any, action: any) =>
+export type State = {
+    image: ImageState;
+    user: UserState;
+    [x: string]: any;
+};
+
+export type Store = [s: State, d: React.Dispatch<Action>];
+
+const combineReducers = (slices: Reducers) => (state: State, action: Action) =>
     Object.keys(slices).reduce(
         (acc, prop) => ({
             ...acc,

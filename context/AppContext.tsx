@@ -4,33 +4,30 @@ import { useI18N } from "@/hooks/useI18N";
 import AuthService from "@/service/AuthService";
 
 import { I18NBase, languages } from "@/i18n";
+import { Action, State, Store } from "@/reducer";
 
 type AppContextDefaultState = {
-    useStore: () => any[];
-    useLocalization: () => I18NBase;
-    useAuthService: () => AuthService;
-    useAuthToken: () => string | null;
+    store: Store;
+    localization: I18NBase;
+    authService: AuthService;
 };
 
 export const AppContext: React.Context<AppContextDefaultState> =
     createContext<AppContextDefaultState>({
-        useStore: () => [],
-        useLocalization: () => ({} as I18NBase),
-        useAuthService: () => ({} as AuthService),
-        useAuthToken: () => null,
+        store: [{} as State, {} as React.Dispatch<Action>],
+        localization: {} as I18NBase,
+        authService: {} as AuthService,
     });
 
 type AppContextProviderProps = {
-    store: any[];
+    store: Store;
     authService: AuthService;
-    authToken: string | null;
     children: React.ReactNode;
 };
 
 export const AppContextProvider = ({
     store,
     authService,
-    authToken,
     children,
 }: AppContextProviderProps) => {
     const localization = useI18N(languages.swedish);
@@ -38,10 +35,9 @@ export const AppContextProvider = ({
     return (
         <AppContext.Provider
             value={{
-                useStore: () => store,
-                useLocalization: () => localization,
-                useAuthService: () => authService,
-                useAuthToken: () => authToken,
+                store,
+                localization,
+                authService,
             }}
         >
             {children}

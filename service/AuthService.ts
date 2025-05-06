@@ -2,8 +2,8 @@ import { deleteItemAsync, setItemAsync } from "expo-secure-store";
 import { decodeJwt } from "jose";
 
 import * as api from "@/api";
-import { getAuthHeader, TokenClaims } from "@/util/auth";
 import { appID } from "@/fotofamExtra.json";
+import { getAuthHeader, TokenClaims } from "@/util/auth";
 
 export type AuthRequest = {
     username: string;
@@ -12,10 +12,16 @@ export type AuthRequest = {
 
 export default class AuthService {
     private dispatch: any;
+    private authToken: string | null = null;
     private baseUrl: string = "http://192.168.0.22:8082"; // use env var in real scenario. start using dotenv files
 
-    constructor([_, dispatch]: any) {
+    constructor([_, dispatch]: any, authToken: string | null) {
         this.dispatch = dispatch;
+        this.authToken = authToken;
+    }
+
+    getAuthToken() {
+        return this.authToken;
     }
 
     async authenticate(body: AuthRequest) {

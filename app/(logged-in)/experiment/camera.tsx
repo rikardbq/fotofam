@@ -43,8 +43,8 @@ export default () => {
     } = useMicrophonePermission();
     const { isDoubleTap, doubleTapHandler } = useDoubleTap();
     const [isInit, setInit] = useState(false);
-    const { useStore } = useContext(AppContext);
-    const [state, dispatch] = useStore();
+    const { store } = useContext(AppContext);
+    const [state, dispatch] = store;
 
     useEffect(() => {
         if (isInit && isDoubleTap) {
