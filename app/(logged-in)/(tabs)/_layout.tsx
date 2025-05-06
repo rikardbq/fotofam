@@ -54,7 +54,7 @@ export default () => {
             }}
         >
             <Tabs.Screen
-                name="index"
+                name="(feed)"
                 options={{
                     title: "Feed",
                     tabBarIcon: ({ color }) => (

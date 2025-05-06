@@ -15,6 +15,7 @@ import Constants from "expo-constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BaseContainer } from "@/components/container/BaseContainer";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
+import { Link } from "expo-router";
 // import { useStore } from "@/hooks/useStore";
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -63,6 +64,12 @@ export default (props: any) => {
                     resizeMode: "contain",
                 }}
             /> */}
+            <View style={{ backgroundColor: "#fff" }}>
+                <Link href={"/post/123" as any} style={{ height: 200 }} withAnchor>
+                    Go to post
+                </Link>
+            </View>
+
             <ScrollContainer>
                 <Post
                     imageProps={{
@@ -119,4 +126,4 @@ export default (props: any) => {
             </ScrollContainer>
         </BaseContainer>
     );
-}
+};
