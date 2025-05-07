@@ -4,5 +4,6 @@
     "label.send": "Skicka",
     "label.authenticate": "Autentisera",
     "label.authorize": "Auktorisera",
-    "label.login": "Logga in"
+    "label.login": "Logga in",
+    "label.edit": "Redigera"
 }

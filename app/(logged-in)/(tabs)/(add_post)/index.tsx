@@ -237,7 +237,7 @@ export default function CameraTab() {
             >
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate("(screens)/camera");
+                        navigation.navigate("camera");
                     }}
                     style={{
                         flex: 1,
@@ -278,7 +278,7 @@ export default function CameraTab() {
                                     dispatch({
                                         type: "SET_CURRENT_PHOTO",
                                         data: {
-                                            value: {
+                                            values: {
                                                 path: p.uri,
                                                 width: p.width,
                                                 height: p.height,

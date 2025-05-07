@@ -38,6 +38,9 @@ export default (props: any) => {
     const testHeight = Dimensions.get("window").height * 0.75;
 
     const styles = StyleSheet.create({
+        test: {
+            gap: 12
+        },
         container: {
             flex: 1,
             backgroundColor: "#000",
@@ -70,7 +73,7 @@ export default (props: any) => {
                 </Link>
             </View>
 
-            <ScrollContainer>
+            <ScrollContainer style={styles.test}>
                 <Post
                     imageProps={{
                         src: `file://${state.image.croppedPhoto.path}`,

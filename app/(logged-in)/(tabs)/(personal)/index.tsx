@@ -6,8 +6,9 @@ import { useNavigation } from "@/hooks/useNavigation";
 import { useImageService } from "@/hooks/useService";
 import { languages } from "@/i18n";
 import axios from "axios";
+import { Link } from "expo-router";
 import { useContext, useState } from "react";
-import { Button, Image, StyleSheet } from "react-native";
+import { Button, Image, StyleSheet, View } from "react-native";
 // import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
@@ -67,7 +68,12 @@ export default function Index(props: any) {
                 label="label.previous"
                 onPress={() => nav.navigate("experiment/component_test")}
             />
-            <Button title={i18n["label.next"]} onPress={() => getData()} />
+            <Button title={i18n["label.next"]} onPress={() => {}/*getData()*/} />
+            <View style={{ backgroundColor: "#fff" }}>
+                            <Link href={"/post/123" as any} style={{ height: 200 }} withAnchor>
+                                Go to post
+                            </Link>
+                        </View>
             {photos.map((photo: any) => (
                 <Image
                     key={photo.id}

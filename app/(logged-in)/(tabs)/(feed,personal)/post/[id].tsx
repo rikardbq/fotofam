@@ -8,13 +8,13 @@ import { Dimensions, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default (props: any) => {
-    const { id: postId } = useLocalSearchParams();
+    const params = useLocalSearchParams();
     const insets = useSafeAreaInsets();
     const { store } = useContext(AppContext);
     const [state, dispatch] = store;
 
     useEffect(() => {
-        console.log(postId);
+        console.log(params);
     }, []);
 
     const testHeight = Dimensions.get("window").height * 0.75;

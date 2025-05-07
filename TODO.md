@@ -1,9 +1,13 @@
 ## TODO
 
-- [ ] Auth
+- [ ] Camera stuff
+    - react-native-vision-camera vs expo-camera
+    - react-native-image-crop-picker vs expo-image-manipulator. See: https://docs.expo.dev/versions/latest/sdk/imagemanipulator/
+
+- [x] Auth
     - [x] AuthService
-    - [ ] Handle token login during application onLoad
-    - [ ] Login screen
+    - [x] Handle token login during application onLoad
+    - [x] Login screen
 
 - [x] use localstorage
     - [x] refresh token
@@ -13,9 +17,6 @@
 - [x] manage images from camera roll to be loaded on demand
     - [x] if image container is considered out of view for more than 1s then replace the content with a simple placeholder view
     - [x] as the image container is brought back into view (any %), immediately show it again.
-
-- caching (wait with this)
-    - store the images in localstorage / sqlite
 
 - write my own camera-roll / camera picker
  - [ ] write UI for camera-roll pictures

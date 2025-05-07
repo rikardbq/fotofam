@@ -1,3 +1,4 @@
+import { STYLES } from "@/util/constants";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 
 const styles = StyleSheet.create({
@@ -6,18 +7,23 @@ const styles = StyleSheet.create({
         // height: 400,
         backgroundColor: "orange",
         borderRadius: 6,
-        overflow: "hidden"
+        overflow: "hidden",
     },
     header: {
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
-        padding: 12,
-        backgroundColor: "green",
+        padding: STYLES.paddings.xl,
+        backgroundColor: "#242424", //"green",
         // color: "#fff"
     },
     footer: {
-        backgroundColor: "red"
+        paddingTop: STYLES.paddings.lg,
+        paddingBottom: STYLES.paddings.lg,
+        paddingLeft: STYLES.paddings.sm,
+        paddingRight: STYLES.paddings.sm,
+        backgroundColor: "#242424", //"red"
+        color: "#fff",
     },
 });
 
@@ -28,7 +34,6 @@ type PostProps = {
         src: string;
     };
 };
-
 
 // const screenAspectRatio = Dimensions.get("window").height / Dimensions.get("window").width;
 
@@ -42,7 +47,7 @@ export const Post = ({ imageProps }: PostProps) => {
                     // width: Dimensions.get("window").width,
                     // height: imageProps.height,
                     // maxHeight: Dimensions.get("window").height * 0.75,
-                    aspectRatio: 1 / 1,//(imageProps.height && imageProps.width) ? imageProps.height / imageProps.width : 1/1,
+                    aspectRatio: 1 / 1, //(imageProps.height && imageProps.width) ? imageProps.height / imageProps.width : 1/1,
                     // aspectRatio: Dimensions.get("window").height * 0.75 / Dimensions.get("window").width,
                     backgroundColor: "blue",
                     resizeMode: "contain",
@@ -65,7 +70,9 @@ const Header = ({ style, username, imageProps }: HeaderProps) => {
     return (
         <View style={style}>
             {/* <Image {...imageProps} /> */}
-            <Text style={{ color: "#fff", fontWeight: 600, fontSize: 16 }}>{username}</Text>
+            <Text style={{ color: "#fff", fontWeight: 600, fontSize: 16 }}>
+                {username}
+            </Text>
         </View>
     );
 };

@@ -5,6 +5,15 @@ export const ROUTES = {
         PERSONAL: "personal",
     },
     SCREENS: {
-        CAMERA: "(screens)/camera"
-    }
+        CAMERA: "(screens)/camera",
+    },
+};
+
+export const STYLES = {
+    paddings: {
+        sm: 4,
+        md: 6,
+        lg: 8,
+        xl: 12,
+    },
 };

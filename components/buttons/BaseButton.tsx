@@ -1,3 +1,4 @@
+import { STYLES } from "@/util/constants";
 import {
     GestureResponderEvent,
     StyleSheet,
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#4499ff",
         borderRadius: 6,
-        padding: 12,
+        padding: STYLES.paddings.xl,
         maxHeight: 60,
         alignItems: "center",
         justifyContent: "center",

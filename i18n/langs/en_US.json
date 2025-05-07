@@ -4,5 +4,6 @@
     "label.send": "Send",
     "label.authenticate": "Authenticate",
     "label.authorize": "Authorize",
-    "label.login": "Log in"
+    "label.login": "Log in",
+    "label.edit": "Edit"
 }

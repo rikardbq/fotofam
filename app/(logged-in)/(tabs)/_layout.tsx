@@ -63,7 +63,7 @@ export default () => {
                 }}
             />
             <Tabs.Screen
-                name="add_post"
+                name="(add_post)"
                 options={{
                     title: "Add post",
                     tabBarIcon: ({ color }) => (
@@ -72,7 +72,7 @@ export default () => {
                 }}
             />
             <Tabs.Screen
-                name="personal"
+                name="(personal)"
                 options={{
                     title: "Personal",
                     tabBarIcon: ({ color }) => (
