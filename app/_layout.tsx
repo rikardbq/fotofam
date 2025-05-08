@@ -1,17 +1,33 @@
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import { getItem, getItemAsync } from "expo-secure-store";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { getItem } from "expo-secure-store";
 
-import { AppContextProvider } from "@/context/AppContext";
+import {
+    AppContextConsumer,
+    AppContextDefaultState,
+    AppContextProvider,
+} from "@/context/AppContext";
 
 import { useAuthService } from "@/hooks/useService";
 import { useStore } from "@/hooks/useStore";
+import { ColorSchemes } from "@/hooks/useTheme";
 import { SECURE_STORE_VARS } from "@/util/constants";
 
 SplashScreen.preventAutoHideAsync();
+
+const getStatusBarStyle = (scheme: ColorSchemes) => {
+    switch (scheme) {
+        case "dark":
+            return "light";
+        case "light":
+            return "dark";
+        default:
+            return "auto";
+    }
+};
 
 export default function RootLayout() {
     const [loaded] = useFonts({
@@ -40,7 +56,11 @@ export default function RootLayout() {
     return (
         <AppContextProvider store={store} authService={authService}>
             <Stack screenOptions={{ headerShown: false }} />
-            <StatusBar style="light" />
+            <AppContextConsumer>
+                {({ colorScheme }: AppContextDefaultState) => (
+                    <StatusBar style={getStatusBarStyle(colorScheme)} />
+                )}
+            </AppContextConsumer>
         </AppContextProvider>
     );
 

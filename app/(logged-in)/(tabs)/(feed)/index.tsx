@@ -81,6 +81,11 @@ export default (props: any) => {
                         ASDFFGFFF
                     </Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => setColorScheme("system")}>
+                    <Text style={{ color: theme.colors.BRIGHT_YELLOW }}>
+                        use system theme
+                    </Text>
+                </TouchableOpacity>
                 <Link
                     href={"/post/123" as any}
                     style={{ height: 200, color: theme.colors.BRIGHT_YELLOW }}

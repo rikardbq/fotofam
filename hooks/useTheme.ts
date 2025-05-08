@@ -7,18 +7,20 @@ import { SECURE_STORE_VARS } from "@/util/constants";
 
 export type ColorSchemes = "system" | "light" | "dark";
 
-export const useTheme: () => [
-    AppTheme,
-    ColorSchemes,
-    React.Dispatch<React.SetStateAction<ColorSchemes>>
-] = () => {
+export const useTheme: () => {
+    theme: AppTheme;
+    colorScheme: ColorSchemes;
+    setColorScheme: React.Dispatch<React.SetStateAction<ColorSchemes>>;
+} = () => {
     const storedSettings = getItem(SECURE_STORE_VARS.colorScheme);
     const systemColorScheme = useColorScheme();
     const [userColorScheme, setUserColorScheme] = useState(
         systemColorScheme ?? "dark"
     );
 
-    const [colorScheme, setColorScheme] = useState<ColorSchemes>(storedSettings as ColorSchemes ?? "system");
+    const [colorScheme, setColorScheme] = useState<ColorSchemes>(
+        (storedSettings as ColorSchemes) ?? "system"
+    );
     const theme = useMemo(() => APP_THEME[userColorScheme], [userColorScheme]);
 
     useEffect(() => {
@@ -35,5 +37,5 @@ export const useTheme: () => [
         }
     }, [systemColorScheme, colorScheme]);
 
-    return [theme, colorScheme, setColorScheme];
+    return { theme, colorScheme, setColorScheme };
 };
