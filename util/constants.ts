@@ -17,3 +17,8 @@ export const STYLES = {
         xl: 12,
     },
 };
+
+export const SECURE_STORE_VARS = {
+    authToken: "auth_t",
+    colorScheme: "user_color_scheme",
+}

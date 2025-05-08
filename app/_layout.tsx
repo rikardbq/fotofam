@@ -9,6 +9,7 @@ import { AppContextProvider } from "@/context/AppContext";
 
 import { useAuthService } from "@/hooks/useService";
 import { useStore } from "@/hooks/useStore";
+import { SECURE_STORE_VARS } from "@/util/constants";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,7 +18,7 @@ export default function RootLayout() {
         SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     });
     const store = useStore();
-    const authToken = getItem("auth_t");
+    const authToken = getItem(SECURE_STORE_VARS.authToken);
     const authService = useAuthService(store, authToken);
 
     useEffect(() => {

@@ -1,5 +1,9 @@
 ## TODO
 
+- [x] add theming
+    - [x] light
+    - [x] dark
+
 - [ ] Camera stuff
     - react-native-vision-camera vs expo-camera
     - react-native-image-crop-picker vs expo-image-manipulator. See: https://docs.expo.dev/versions/latest/sdk/imagemanipulator/

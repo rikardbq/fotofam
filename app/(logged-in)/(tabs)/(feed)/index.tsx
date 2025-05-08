@@ -1,27 +1,24 @@
+import { BaseContainer } from "@/components/container/BaseContainer";
+import { ScrollContainer } from "@/components/container/ScrollContainer";
 import { Post } from "@/components/post/Post";
 import { AppContext } from "@/context/AppContext";
-import { useContext, useEffect, useState } from "react";
+import Constants from "expo-constants";
+import { Link } from "expo-router";
+import { useContext, useEffect } from "react";
 import {
-    Button,
     Dimensions,
-    Image,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from "react-native";
-import Animated from "react-native-reanimated";
-import Constants from "expo-constants";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BaseContainer } from "@/components/container/BaseContainer";
-import { ScrollContainer } from "@/components/container/ScrollContainer";
-import { Link } from "expo-router";
-// import { useStore } from "@/hooks/useStore";
 const statusBarHeight = Constants.statusBarHeight;
 
 export default (props: any) => {
     const insets = useSafeAreaInsets();
-    const { store } = useContext(AppContext);
+    const { store, theme, colorScheme, setColorScheme } =
+        useContext(AppContext);
     const [state, dispatch] = store;
 
     // const {
@@ -39,7 +36,7 @@ export default (props: any) => {
 
     const styles = StyleSheet.create({
         test: {
-            gap: 12
+            gap: 12,
         },
         container: {
             flex: 1,
@@ -67,8 +64,28 @@ export default (props: any) => {
                     resizeMode: "contain",
                 }}
             /> */}
-            <View style={{ backgroundColor: "#fff" }}>
-                <Link href={"/post/123" as any} style={{ height: 200 }} withAnchor>
+            <View
+                style={{
+                    backgroundColor: theme.colors.BRIGHT_RED,
+                    marginTop: 100,
+                }}
+            >
+                <TouchableOpacity
+                    onPress={() =>
+                        setColorScheme(
+                            colorScheme === "light" ? "dark" : "light"
+                        )
+                    }
+                >
+                    <Text style={{ color: theme.colors.BRIGHT_YELLOW }}>
+                        ASDFFGFFF
+                    </Text>
+                </TouchableOpacity>
+                <Link
+                    href={"/post/123" as any}
+                    style={{ height: 200, color: theme.colors.BRIGHT_YELLOW }}
+                    withAnchor
+                >
                     Go to post
                 </Link>
             </View>
