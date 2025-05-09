@@ -1,4 +1,4 @@
-import { createContext, useEffect } from "react";
+import React, { createContext } from "react";
 
 import { useI18N } from "@/hooks/useI18N";
 import AuthService from "@/service/AuthService";
@@ -64,9 +64,5 @@ type AppContextConsumerProps = {
 };
 
 export const AppContextConsumer = ({ children }: AppContextConsumerProps) => {
-    return (
-        <AppContext.Consumer>
-            {children}
-        </AppContext.Consumer>
-    );
+    return <AppContext.Consumer>{children}</AppContext.Consumer>;
 };
