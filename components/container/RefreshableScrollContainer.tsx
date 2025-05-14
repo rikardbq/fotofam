@@ -1,4 +1,3 @@
-import MCICONS from "@expo/vector-icons/MaterialCommunityIcons";
 import React, { useMemo, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import {
@@ -7,7 +6,10 @@ import {
     GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import Animated, {
+    createAnimatedPropAdapter,
+    processColor,
     runOnJS,
+    useAnimatedProps,
     useAnimatedScrollHandler,
     useAnimatedStyle,
     useSharedValue,
@@ -15,29 +17,50 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated";
 
-import { ScrollContainer } from "./ScrollContainer";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Svg, { Circle } from "react-native-svg";
 
-const REFRESH_CIRCLE_SIZE = 32;
-const INITIAL_REFRESH_CIRCLE_OPACITY = 0;
-const DELAY_RESET_POSITION = 200;
+import { ScrollContainer } from "./ScrollContainer";
+
+const REFRESH_CIRCLE_SIZE = 42;
+const REFRESH_CIRCLE_BG_SIZE = REFRESH_CIRCLE_SIZE + 4;
+const REFRESH_CIRCLE_INITIAL_OPACITY = 0;
+const REFRESH_CIRCLE_INITIAL_DASHOFFSET = 251;
+const REFRESH_CIRCLE_RESET_POSITION_DELAY = 200;
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
     refreshCircle: {
         position: "absolute",
         zIndex: 999,
-        left: Dimensions.get("window").width / 2 - REFRESH_CIRCLE_SIZE / 2,
+        backgroundColor: "#242424",
+        width: REFRESH_CIRCLE_BG_SIZE,
+        height: REFRESH_CIRCLE_BG_SIZE,
+        borderRadius: REFRESH_CIRCLE_BG_SIZE,
+        left: Dimensions.get("window").width / 2 - REFRESH_CIRCLE_BG_SIZE / 2,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    svg: {
+        transform: [{ rotate: "-90deg" }],
     },
 });
 
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+
 export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
     const insets = useSafeAreaInsets();
-    const INITIAL_REFRESH_CIRCLE_POS = useMemo(() => insets.top + 12, [insets.top]);
+    const REFRESH_CIRCLE_INITIAL_POS = useMemo(
+        () => insets.top + 12,
+        [insets.top]
+    );
 
     const [isPanEnabled, setIsPanEnabled] = useState(true);
-    const refreshCirclePos = useSharedValue(INITIAL_REFRESH_CIRCLE_POS);
-    const refreshCircleOpacity = useSharedValue(INITIAL_REFRESH_CIRCLE_OPACITY);
+    const refreshCirclePos = useSharedValue(REFRESH_CIRCLE_INITIAL_POS);
+    const refreshCircleOpacity = useSharedValue(REFRESH_CIRCLE_INITIAL_OPACITY);
+    const refreshCircleStroke = useSharedValue(
+        REFRESH_CIRCLE_INITIAL_DASHOFFSET
+    );
 
     const updatePanState = (offset: number) => {
         "worklet";
@@ -51,33 +74,47 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
     const scrollPanGesture = Gesture.Pan()
         .onUpdate(({ translationY }) => {
             if (translationY > 0) {
-                const posLog = Math.log2(translationY) * 16;
+                const tYLog = Math.log2(translationY);
+                const pos = tYLog * 12;
                 const maxPos = 100;
+                const percent = pos / maxPos;
+                const clampPercent = percent > 1 ? 1 : percent;
 
-                refreshCircleOpacity.value = posLog / maxPos;
-                refreshCirclePos.value = posLog;
+                refreshCirclePos.value = pos;
+                refreshCircleOpacity.value = clampPercent;
+                refreshCircleStroke.value =
+                    REFRESH_CIRCLE_INITIAL_DASHOFFSET -
+                    REFRESH_CIRCLE_INITIAL_DASHOFFSET * clampPercent;
             }
         })
         .onFinalize(({ translationY }) => {
             const refreshCircleResetPosAnim = withTiming(
-                INITIAL_REFRESH_CIRCLE_POS
+                REFRESH_CIRCLE_INITIAL_POS
             );
             const refreshCircleResetOpacityAnim = withTiming(
-                INITIAL_REFRESH_CIRCLE_OPACITY
+                REFRESH_CIRCLE_INITIAL_OPACITY
+            );
+            const refreshCircleResetStrokeAnim = withTiming(
+                REFRESH_CIRCLE_INITIAL_DASHOFFSET
             );
 
-            if (translationY >= -INITIAL_REFRESH_CIRCLE_POS) {
+            if (translationY >= REFRESH_CIRCLE_INITIAL_POS) {
                 refreshCirclePos.value = withDelay(
-                    DELAY_RESET_POSITION,
+                    REFRESH_CIRCLE_RESET_POSITION_DELAY,
                     refreshCircleResetPosAnim
                 );
                 refreshCircleOpacity.value = withDelay(
-                    DELAY_RESET_POSITION,
+                    REFRESH_CIRCLE_RESET_POSITION_DELAY,
                     refreshCircleResetOpacityAnim
+                );
+                refreshCircleStroke.value = withDelay(
+                    REFRESH_CIRCLE_RESET_POSITION_DELAY,
+                    refreshCircleResetStrokeAnim
                 );
             } else {
                 refreshCirclePos.value = refreshCircleResetPosAnim;
                 refreshCircleOpacity.value = refreshCircleResetOpacityAnim;
+                refreshCircleStroke.value = refreshCircleResetStrokeAnim;
             }
         })
         .enabled(isPanEnabled);
@@ -95,12 +132,42 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
     });
 
     const refreshCircleAnimatedStyles = useAnimatedStyle(() => ({
-        transform: [
-            { translateY: refreshCirclePos.value },
-            { rotate: `${refreshCirclePos.value * 4}deg` },
-        ],
+        transform: [{ translateY: refreshCirclePos.value }],
         opacity: refreshCircleOpacity.value,
     }));
+
+    const adapter = createAnimatedPropAdapter(
+        (props) => {
+            if (Object.keys(props).includes("stroke")) {
+                props.stroke = {
+                    type: 0,
+                    payload: processColor(props.stroke),
+                };
+            }
+            if (Object.keys(props).includes("fill")) {
+                props.fill = {
+                    type: 0,
+                    payload: processColor(props.fill),
+                };
+            }
+        },
+        ["fill", "stroke"]
+    );
+
+    const animatedProps = useAnimatedProps(
+        () => ({
+            cx: 50,
+            cy: 50,
+            r: 40,
+            fill: "transparent",
+            stroke: "#44cc44",
+            strokeWidth: 8,
+            strokeDasharray: "251,251",
+            strokeDashoffset: refreshCircleStroke.value,
+        }),
+        [],
+        adapter
+    );
 
     const nativeGesture = Gesture.Native();
     const composedGestures = Gesture.Simultaneous(
@@ -114,11 +181,14 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
                 <Animated.View
                     style={[styles.refreshCircle, refreshCircleAnimatedStyles]}
                 >
-                    <MCICONS
-                        name="refresh-circle"
-                        size={REFRESH_CIRCLE_SIZE}
-                        color="#ffffff"
-                    />
+                    <Svg
+                        style={styles.svg}
+                        width={REFRESH_CIRCLE_SIZE}
+                        height={REFRESH_CIRCLE_SIZE}
+                        viewBox="0 0 100 100"
+                    >
+                        <AnimatedCircle animatedProps={animatedProps} />
+                    </Svg>
                 </Animated.View>
                 <GestureDetector gesture={composedGestures}>
                     <ScrollContainer
