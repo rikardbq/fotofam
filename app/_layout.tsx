@@ -14,7 +14,7 @@ import {
 import { useAuthService } from "@/hooks/useService";
 import { useStore } from "@/hooks/useStore";
 import { ColorSchemes } from "@/hooks/useTheme";
-import { SECURE_STORE_VARS } from "@/util/constants";
+import { FONT_NAMES, SECURE_STORE_VARS } from "@/util/constants";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -30,8 +30,15 @@ const getStatusBarStyle = (scheme: ColorSchemes) => {
 };
 
 export default function RootLayout() {
-    const [loaded] = useFonts({
-        SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    const [loaded, _] = useFonts({
+        [FONT_NAMES.RUBIK_LIGHT]: require("../assets/fonts/Rubik-Light.ttf"),
+        [FONT_NAMES.RUBIK_REGULAR]: require("../assets/fonts/Rubik-Regular.ttf"),
+        [FONT_NAMES.RUBIK_MEDIUM]: require("../assets/fonts/Rubik-Medium.ttf"),
+        [FONT_NAMES.RUBIK_BOLD]: require("../assets/fonts/Rubik-Bold.ttf"),
+        [FONT_NAMES.RUBIK_LIGHT_ITALIC]: require("../assets/fonts/Rubik-LightItalic.ttf"),
+        [FONT_NAMES.RUBIK_REGULAR_ITALIC]: require("../assets/fonts/Rubik-RegularItalic.ttf"),
+        [FONT_NAMES.RUBIK_MEDIUM_ITALIC]: require("../assets/fonts/Rubik-MediumItalic.ttf"),
+        [FONT_NAMES.RUBIK_BOLD_ITALIC]: require("../assets/fonts/Rubik-BoldItalic.ttf"),
     });
     const store = useStore();
     const authToken = getItem(SECURE_STORE_VARS.authToken);

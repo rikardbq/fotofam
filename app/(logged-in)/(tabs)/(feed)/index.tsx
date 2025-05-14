@@ -1,17 +1,10 @@
 import { BaseContainer } from "@/components/container/BaseContainer";
-import { ScrollContainer } from "@/components/container/ScrollContainer";
+import { RefreshableScrollContainer } from "@/components/container/RefreshableScrollContainer";
 import { Post } from "@/components/post/Post";
 import { AppContext } from "@/context/AppContext";
 import Constants from "expo-constants";
-import { Link } from "expo-router";
 import { useContext, useEffect } from "react";
-import {
-    Dimensions,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -20,13 +13,6 @@ export default (props: any) => {
     const { store, theme, colorScheme, setColorScheme } =
         useContext(AppContext);
     const [state, dispatch] = store;
-
-    // const {
-    //     image: { currentPhoto, croppedPhoto },
-    // } = state;
-    useEffect(() => {
-        console.log("STATE ---> ", state);
-    }, []);
 
     useEffect(() => {
         console.log("wasup", state);
@@ -64,38 +50,42 @@ export default (props: any) => {
                     resizeMode: "contain",
                 }}
             /> */}
-            <View
-                style={{
-                    backgroundColor: theme.colors.BRIGHT_RED,
-                    marginTop: 100,
-                }}
-            >
-                <TouchableOpacity
-                    onPress={() =>
-                        setColorScheme(
-                            colorScheme === "light" ? "dark" : "light"
-                        )
-                    }
+            {/* <View
+                    style={{
+                        backgroundColor: theme.colors.BRIGHT_RED,
+                        marginTop: 100,
+                    }}
                 >
-                    <Text style={{ color: theme.colors.BRIGHT_YELLOW }}>
-                        ASDFFGFFF
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setColorScheme("system")}>
-                    <Text style={{ color: theme.colors.BRIGHT_YELLOW }}>
-                        use system theme
-                    </Text>
-                </TouchableOpacity>
-                <Link
-                    href={"/post/123" as any}
-                    style={{ height: 200, color: theme.colors.BRIGHT_YELLOW }}
-                    withAnchor
-                >
-                    Go to post
-                </Link>
-            </View>
+                    <TouchableOpacity
+                        onPress={() =>
+                            setColorScheme(
+                                colorScheme === "light" ? "dark" : "light"
+                            )
+                        }
+                    >
+                        <Text style={{ color: theme.colors.BRIGHT_YELLOW }}>
+                            ASDFFGFFF
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setColorScheme("system")}>
+                        <Text style={{ color: theme.colors.BRIGHT_YELLOW }}>
+                            use system theme
+                        </Text>
+                    </TouchableOpacity>
+                    <Link
+                        href={"/post/123" as any}
+                        style={{
+                            height: 200,
+                            color: theme.colors.BRIGHT_YELLOW,
+                        }}
+                        withAnchor
+                    >
+                        Go to post
+                    </Link>
+                </View> */}
 
-            <ScrollContainer style={styles.test}>
+            <RefreshableScrollContainer contentContainerStyle={{ gap: 12 }}>
+                {/* <ScrollContainer style={styles.test}> */}
                 <Post
                     imageProps={{
                         src: `file://${state.image.croppedPhoto.path}`,
@@ -148,7 +138,8 @@ export default (props: any) => {
                         objectFit: "contain",
                     }}
                 /> */}
-            </ScrollContainer>
+                {/* </ScrollContainer> */}
+            </RefreshableScrollContainer>
         </BaseContainer>
     );
 };

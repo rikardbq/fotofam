@@ -1,5 +1,6 @@
-import { STYLES } from "@/util/constants";
+import globalStyles, { PADDINGS } from "@/util/globalStyles";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import ThemedHeading from "../typography/theme/ThemedHeading";
 
 const styles = StyleSheet.create({
     container: {
@@ -13,15 +14,15 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
-        padding: STYLES.paddings.xl,
+        padding: PADDINGS.xl,
         backgroundColor: "#242424", //"green",
         // color: "#fff"
     },
     footer: {
-        paddingTop: STYLES.paddings.lg,
-        paddingBottom: STYLES.paddings.lg,
-        paddingLeft: STYLES.paddings.sm,
-        paddingRight: STYLES.paddings.sm,
+        paddingTop: PADDINGS.lg,
+        paddingBottom: PADDINGS.lg,
+        paddingLeft: PADDINGS.sm,
+        paddingRight: PADDINGS.sm,
         backgroundColor: "#242424", //"red"
         color: "#fff",
     },
@@ -70,9 +71,7 @@ const Header = ({ style, username, imageProps }: HeaderProps) => {
     return (
         <View style={style}>
             {/* <Image {...imageProps} /> */}
-            <Text style={{ color: "#fff", fontWeight: 600, fontSize: 16 }}>
-                {username}
-            </Text>
+            <ThemedHeading size="sm">@{username}</ThemedHeading>
         </View>
     );
 };

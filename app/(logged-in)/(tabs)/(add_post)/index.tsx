@@ -183,7 +183,7 @@ export default function CameraTab() {
                 }}
             />
             <ScrollContainer
-                style={styles.scroll_container}
+                contentContainerStyle={styles.scroll_container}
                 onLayout={(e) => {
                     const h = e.nativeEvent.layout.height;
                     setFrameHeight(h);

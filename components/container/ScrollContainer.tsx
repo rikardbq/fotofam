@@ -1,10 +1,5 @@
-import {
-    LayoutChangeEvent,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
-    StyleSheet,
-} from "react-native";
-import Animated from "react-native-reanimated";
+import { StyleSheet } from "react-native";
+import Animated, { AnimatedScrollViewProps } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const styles = StyleSheet.create({
@@ -15,41 +10,33 @@ const styles = StyleSheet.create({
 
 type ScrollContainer = {
     children: React.ReactNode;
-    onLayout?: (event: LayoutChangeEvent) => void;
-    onContentSizeChange?: (w: number, h: number) => void;
-    onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-    onScrollEndDrag?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-    scrollEventThrottle?: number;
     style?: any;
+    contentContainerStyle?: any;
 };
 
 export const ScrollContainer = ({
     children,
-    onLayout,
-    onContentSizeChange,
-    onScroll,
-    onScrollEndDrag,
-    scrollEventThrottle,
     style,
-}: ScrollContainer) => {
+    contentContainerStyle,
+    ...rest
+}: AnimatedScrollViewProps) => {
     const insets = useSafeAreaInsets();
 
     return (
         <Animated.ScrollView
-            onLayout={onLayout}
-            onContentSizeChange={onContentSizeChange}
-            onScroll={onScroll}
-            onScrollEndDrag={onScrollEndDrag}
-            scrollEventThrottle={scrollEventThrottle}
-            contentContainerStyle={{
-                // backgroundColor: "#000", // for debug
-                paddingTop: insets.top + 6,
-                paddingBottom: insets.bottom + 6,
-                paddingLeft: insets.left + 6,
-                paddingRight: insets.right + 6,
-                ...styles.scroll_container,
-                ...style,
-            }}
+            {...rest}
+            contentContainerStyle={[
+                {
+                    // backgroundColor: "#000", // for debug
+                    paddingTop: insets.top + 6,
+                    paddingBottom: insets.bottom + 6,
+                    paddingLeft: insets.left + 6,
+                    paddingRight: insets.right + 6,
+                },
+                styles.scroll_container,
+                contentContainerStyle,
+            ]}
+            style={style}
         >
             {children}
         </Animated.ScrollView>

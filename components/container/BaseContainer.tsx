@@ -12,8 +12,8 @@ type BaseContainer = {
     style?: any;
 };
 
-export const BaseContainer = ({ children, style }: any) => {
+export const BaseContainer = ({ children, style, ...rest }: BaseContainer) => {
     return (
-        <View style={{ ...styles.base_container, ...style }}>{children}</View>
+        <View style={[ styles.base_container, style ]} {...rest}>{children}</View>
     );
 };

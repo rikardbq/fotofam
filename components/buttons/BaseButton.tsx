@@ -1,4 +1,5 @@
-import { STYLES } from "@/util/constants";
+import { FONT_NAMES } from "@/util/constants";
+import globalStyles, { PADDINGS } from "@/util/globalStyles";
 import {
     GestureResponderEvent,
     StyleSheet,
@@ -9,7 +10,7 @@ import {
 type LocalizedButton = {
     label?: string;
     onPress?: (e: GestureResponderEvent) => void;
-    disabled?: boolean,
+    disabled?: boolean;
     underlayColor?: string;
     activeOpacity?: number;
     children?: React.ReactNode;
@@ -19,15 +20,14 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#4499ff",
         borderRadius: 6,
-        padding: STYLES.paddings.xl,
+        padding: PADDINGS.xl,
         maxHeight: 60,
         alignItems: "center",
         justifyContent: "center",
     },
     text: {
-        fontSize: 18,
-        fontStyle: "normal",
-        fontWeight: 600,
+        ...globalStyles.font,
+        fontFamily: FONT_NAMES.RUBIK_MEDIUM,
         color: "#fff",
     },
 });
