@@ -13,6 +13,7 @@ import globalStyles from "@/util/globalStyles";
 export default () => {
     const router = useRouter();
     const { authService, theme } = useContext(AppContext);
+    const [st, setSt] = useState(false);
 
     const [username, onChangeUsername] = useState<string | undefined>(
         undefined
@@ -36,6 +37,7 @@ export default () => {
         <BaseContainer>
             <ScrollContainer>
                 <View style={styles.loginBox}>
+                    {st && (<Text style={{ ...globalStyles.font, fontWeight: 800, color: theme.colors.BRIGHT_RED }}>ERR</Text>)}
                     <Text style={{ ...globalStyles.font, fontWeight: 800, color: theme.colors.FG1 }}>LOGGA IN</Text>
                     <TextInput
                         style={styles.input}
@@ -62,6 +64,9 @@ export default () => {
                                     authService.login(rt).then(() => {
                                         router.replace("/(logged-in)" as any);
                                     });
+                                }).catch(e => {
+                                    console.log("rethrew err ", e.response);
+                                    setSt(true);
                                 });
                         }}
                     />

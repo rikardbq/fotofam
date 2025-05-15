@@ -9,7 +9,7 @@ type Reducers = {
 
 export type Action = {
     type: string;
-    data: Record<string, any>
+    data?: Record<string, any>
 };
 
 export type State = {

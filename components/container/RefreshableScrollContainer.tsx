@@ -7,6 +7,7 @@ import {
 } from "react-native-gesture-handler";
 import Animated, {
     createAnimatedPropAdapter,
+    Easing,
     processColor,
     runOnJS,
     useAnimatedProps,
@@ -30,6 +31,15 @@ const REFRESH_CIRCLE_RESET_POSITION_DELAY = 200;
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
+    circleBorder: {
+        position: "absolute",
+        left: Dimensions.get("window").width / 2 - REFRESH_CIRCLE_BG_SIZE / 2,
+        zIndex: 999,
+        backgroundColor: "#44cc44",
+        width: REFRESH_CIRCLE_BG_SIZE,
+        height: REFRESH_CIRCLE_BG_SIZE,
+        borderRadius: REFRESH_CIRCLE_BG_SIZE,
+    },
     refreshCircle: {
         position: "absolute",
         zIndex: 999,
@@ -42,6 +52,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     svg: {
+        zIndex: 999,
         transform: [{ rotate: "-90deg" }],
     },
 });
@@ -131,6 +142,19 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
         },
     });
 
+    const circleBorderAnimatedStyles = useAnimatedStyle(() => ({
+        transform: [
+            { translateY: refreshCirclePos.value },
+            {
+                scale: withTiming(refreshCircleOpacity.value === 1 ? 1.2 : 1, {
+                    duration: 250,
+                    easing: Easing.elastic(2),
+                }),
+            },
+        ],
+        opacity: refreshCircleOpacity.value === 1 ? 1 : 0,
+    }));
+
     const refreshCircleAnimatedStyles = useAnimatedStyle(() => ({
         transform: [{ translateY: refreshCirclePos.value }],
         opacity: refreshCircleOpacity.value,
@@ -178,6 +202,9 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
     return (
         <GestureHandlerRootView>
             <View style={styles.container}>
+                <Animated.View
+                    style={[styles.circleBorder, circleBorderAnimatedStyles]}
+                />
                 <Animated.View
                     style={[styles.refreshCircle, refreshCircleAnimatedStyles]}
                 >

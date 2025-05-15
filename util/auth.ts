@@ -29,7 +29,7 @@ export const encodePassword = (password: string) => {
     return Buffer.from(splicePassword(password), "utf-8").toString("base64");
 };
 
-export const getAuthHeader = (token: string): AuthHeaders => ({
+export const createAuthHeader = (token: string): AuthHeaders => ({
     Authorization: `Bearer ${token}`
 });
 
