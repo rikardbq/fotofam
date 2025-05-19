@@ -2,11 +2,10 @@ import { deleteItemAsync, setItemAsync } from "expo-secure-store";
 import { decodeJwt } from "jose";
 
 import * as api from "@/api";
-import { appID } from "@/fotofamExtra.json";
-import { createAuthHeader, TokenClaims } from "@/util/auth";
-import { SECURE_STORE_VARS } from "@/util/constants";
+import { Action, Store } from "@/reducer";
 import { UserState } from "@/reducer/userReducer";
-import { Action, State, Store } from "@/reducer";
+import { createAuthHeader, generateSignature, TokenClaims } from "@/util/auth";
+import { SECURE_STORE_VARS } from "@/util/constants";
 
 export type AuthRequest = {
     username: string;
@@ -29,12 +28,15 @@ export default class AuthService {
         return this.authToken;
     }
 
-    async authenticate(body: AuthRequest) {
+    async authenticate(username: string, password: string) {
         try {
             const {
                 data: { token: at },
-            } = await api.post(`${this.baseUrl}/authenticate`, body);
-    
+            } = await api.post(`${this.baseUrl}/authenticate`, {
+                username,
+                password: await generateSignature(username, password),
+            });
+
             const {
                 data: { token: rt },
             } = await api.post(
@@ -42,13 +44,13 @@ export default class AuthService {
                 undefined,
                 createAuthHeader(at)
             );
-    
+
             return rt;
         } catch (error: any) {
-           const response = error.response;
+            const response = error.response;
             const path = response.request.responseURL;
             const status = response.status;
-            
+
             console.error(path);
             console.error(status);
 
@@ -83,10 +85,10 @@ export default class AuthService {
             const response = error.response;
             const path = response.request.responseURL;
             const status = response.status;
-            
+
             console.error(path);
             console.error(status);
-            
+
             if (status === 401 || status === 403) {
                 await deleteItemAsync(SECURE_STORE_VARS.authToken);
             }
@@ -107,9 +109,14 @@ export default class AuthService {
                 undefined
             );
         } catch (error: any) {
-            // console.log(error.response.config.url);
-            // depending on which endpoint is matched here and what the status code is the app will decide on error message and / or clear app state and then show login screen again.
-            console.log(error.response.request.responseURL);
+            const response = error.response;
+            const path = response.request.responseURL;
+            const status = response.status;
+
+            console.error(path);
+            console.error(status);
+
+            throw error;
         }
     }
 }
