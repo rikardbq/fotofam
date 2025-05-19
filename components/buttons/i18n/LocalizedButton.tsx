@@ -5,7 +5,7 @@ import { GestureResponderEvent } from "react-native";
 import BaseButton from "../BaseButton";
 
 type LocalizedButton = {
-    label: I18NKeys | string;
+    label: I18NKeys;
     onPress?: (e: GestureResponderEvent) => void;
     disabled?: boolean;
 };
@@ -13,5 +13,5 @@ type LocalizedButton = {
 export default ({ label, onPress, disabled }: LocalizedButton) => {
     const { localization: i18n } = useContext(AppContext);
 
-    return <BaseButton disabled={disabled} onPress={onPress} label={i18n[label as I18NKeys] ?? label} />;
+    return <BaseButton disabled={disabled} onPress={onPress} label={i18n[label] ?? label as string} />;
 };

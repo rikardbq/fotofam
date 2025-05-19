@@ -1,6 +1,8 @@
 import { AppContext } from "@/context/AppContext";
 import { useDoubleTap } from "@/hooks/useDoubleTap";
+import { useNavigation } from "@/hooks/useNavigation";
 import axios from "axios";
+import { useRouter } from "expo-router";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { openCropper } from "react-native-image-crop-picker";
@@ -13,6 +15,8 @@ import {
 } from "react-native-vision-camera";
 
 export default () => {
+    const navigation = useNavigation();
+    const router = useRouter();
     const camera = useRef<Camera>(null);
     const device = useCameraDevice("back");
     const screenAspectRatio =
@@ -142,7 +146,7 @@ export default () => {
                 cropperToolbarColor: "#000000",
                 cropperToolbarWidgetColor: "#ffffff",
                 cropperStatusBarColor: "#000000",
-                cropperToolbarTitle: localization["label.edit"]
+                cropperToolbarTitle: localization["label.edit"],
             }).then((image) => {
                 dispatch({
                     type: "SET_CROPPED_PHOTO",
@@ -154,6 +158,8 @@ export default () => {
                         },
                     },
                 });
+                // navigation.navigate("index");
+                router.replace("/(logged-in)/(tabs)/(add_post)");
             });
         }
     }, [state.image.currentPhoto]);

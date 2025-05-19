@@ -40,7 +40,7 @@ export const AppContextProvider = ({
     authService,
     children,
 }: AppContextProviderProps) => {
-    const localization = useI18N(languages.swedish);
+    const localization = useI18N(languages.swe);
     const { theme, colorScheme, setColorScheme } = useTheme();
 
     return (

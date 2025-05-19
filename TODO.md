@@ -1,8 +1,17 @@
 ## TODO
 
-- [x] add theming
-    - [x] light
-    - [x] dark
+- [ ] write UI for camera-roll pictures
+    - [x] expo-media-library
+    - [x] getPhotos, populate state
+    - [x] add extra button for the camera which will be the first index in the array (grid of stuff)
+        - after taking picture with camera, go back to previous UI and use the newly taken pic as the preview
+    - [x] preview currently selected image on the top half of the screen.
+    - [ ] button at the bottom to go to next screen
+        - [ ] next screen is the cropper
+        - [ ] after cropping is done move to final screen
+    - [ ] final screen is a cropped version of the picture with a optional text description field below
+    - [ ] button at the bottom to post the picture
+
 
 - [ ] Camera stuff
     - react-native-vision-camera vs expo-camera
@@ -21,19 +30,6 @@
 - [x] manage images from camera roll to be loaded on demand
     - [x] if image container is considered out of view for more than 1s then replace the content with a simple placeholder view
     - [x] as the image container is brought back into view (any %), immediately show it again.
-
-- write my own camera-roll / camera picker
- - [ ] write UI for camera-roll pictures
-    - [x] expo-media-library
-    - [x] getPhotos, populate state
-    - [x] add extra button for the camera which will be the first index in the array (grid of stuff)
-        - after taking picture with camera, go back to previous UI and use the newly taken pic as the preview
-    - [x] preview currently selected image on the top half of the screen.
-    - [ ] button at the bottom to go to next screen
-        - [ ] next screen is the cropper
-        - [ ] after cropping is done move to final screen
-    - [ ] final screen is a cropped version of the picture with a optional text description field below
-    - [ ] button at the bottom to post the picture
 
 - picture format is 1920 x 1080 with ScreenAspectRatio (Dimensions.get("window").height / Dimensions.get("window").width)
 - any1 of these, see [instagram image formats](https://influencermarketinghub.com/instagram-image-sizes/)

@@ -9,15 +9,15 @@ const mergeWithBase = (lang: Record<string, any>) => ({
 });
 
 export const languages = {
-    english: "en_US",
-    swedish: "se_SV",
+    eng: "en_US",
+    swe: "se_SV",
 };
 
 export default (lang: string) => {
     switch (lang) {
-        case languages.english:
+        case languages.eng:
             return mergeWithBase(require("./langs/en_US.json"));
-        case languages.swedish:
+        case languages.swe:
             return mergeWithBase(require("./langs/se_SV.json"));
         default:
             return mergeWithBase(require("./langs/en_US.json"));

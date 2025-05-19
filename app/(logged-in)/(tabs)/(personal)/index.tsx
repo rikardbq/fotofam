@@ -1,10 +1,8 @@
 import LocalizedButton from "@/components/buttons/i18n/LocalizedButton";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
 import { AppContext } from "@/context/AppContext";
-import { useI18N } from "@/hooks/useI18N";
 import { useNavigation } from "@/hooks/useNavigation";
 import { useImageService } from "@/hooks/useService";
-import { languages } from "@/i18n";
 import axios from "axios";
 import { Link } from "expo-router";
 import { useContext, useState } from "react";
@@ -37,13 +35,12 @@ created_at = photos[photos.length - 1]?.created_at ?? 0;
 
 export default function Index(props: any) {
     console.log(props);
-    const { store } = useContext(AppContext);
+    const { store, localization } = useContext(AppContext);
     const [state, dispatch] = store;
     const imageService = useImageService([state, dispatch]);
     const {
         image: { photos },
     } = state;
-    const i18n = useI18N(languages.swedish);
     const nav = useNavigation();
 
     const [tex, setTex] = useState("");
@@ -65,15 +62,22 @@ export default function Index(props: any) {
     return (
         <ScrollContainer>
             <LocalizedButton
-                label="label.previous"
+                label="label.login"
                 onPress={() => nav.navigate("experiment/component_test")}
             />
-            <Button title={i18n["label.next"]} onPress={() => {}/*getData()*/} />
+            <Button
+                title={localization["label.next"]}
+                onPress={() => {} /*getData()*/}
+            />
             <View style={{ backgroundColor: "#fff" }}>
-                            <Link href={"/post/123" as any} style={{ height: 200 }} withAnchor>
-                                Go to post
-                            </Link>
-                        </View>
+                <Link
+                    href={"/post/123" as any}
+                    style={{ height: 200 }}
+                    withAnchor
+                >
+                    Go to post
+                </Link>
+            </View>
             {photos.map((photo: any) => (
                 <Image
                     key={photo.id}
