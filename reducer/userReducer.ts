@@ -1,6 +1,7 @@
 import { Action as RootAction } from "@/reducer";
 
 const actions = {
+    SET_TOKEN: "SET_TOKEN",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
     SET_USER_DATA: "SET_USER_DATA",
@@ -8,14 +9,14 @@ const actions = {
 
 export type UserState = {
     auth_t?: string;
-    loggedIn?: boolean;
+    loggedIn: boolean;
     username?: string;
     realName?: string;
 };
 
 const initialState: UserState = {
     auth_t: undefined,
-    loggedIn: undefined,
+    loggedIn: false,
     username: undefined,
     realName: undefined,
 };
@@ -28,6 +29,12 @@ type Action = RootAction & {
 
 const reducer = (state: UserState, action: Action) => {
     switch (action.type) {
+        case actions.SET_TOKEN: {
+            return {
+                ...state,
+                auth_t: action.data.values.auth_t,
+            };
+        }
         case actions.LOGIN_USER: {
             return {
                 ...state,
@@ -37,10 +44,7 @@ const reducer = (state: UserState, action: Action) => {
             };
         }
         case actions.LOGOUT_USER: {
-            return {
-                ...initialState,
-                loggedIn: false,
-            };
+            return initialState;
         }
         case actions.SET_USER_DATA: {
             return {

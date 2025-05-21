@@ -15,17 +15,11 @@ export type AuthRequest = {
 export default class AuthService {
     private state: UserState;
     private dispatch: React.Dispatch<Action>;
-    private authToken: string | null = null;
     private baseUrl: string = "http://192.168.0.22:8082"; // use env var in real scenario. start using dotenv files
 
-    constructor([state, dispatch]: Store, authToken: string | null) {
+    constructor([state, dispatch]: Store) {
         this.state = state.user;
         this.dispatch = dispatch;
-        this.authToken = authToken;
-    }
-
-    getAuthToken() {
-        return this.authToken;
     }
 
     async authenticate(username: string, password: string) {
@@ -90,7 +84,10 @@ export default class AuthService {
             console.error(status);
 
             if (status === 401 || status === 403) {
-                this.authToken = null;
+                this.dispatch({
+                    type: "LOGOUT_USER",
+                });
+
                 await deleteItemAsync(SECURE_STORE_VARS.authToken);
             }
 

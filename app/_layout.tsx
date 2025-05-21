@@ -1,9 +1,9 @@
-import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
+import { getItemAsync } from "expo-secure-store";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { getItem } from "expo-secure-store";
+import { useEffect, useLayoutEffect } from "react";
 
 import {
     AppContextConsumer,
@@ -41,18 +41,29 @@ export default function RootLayout() {
         [FONT_NAMES.RUBIK_BOLD_ITALIC]: require("../assets/fonts/Rubik-BoldItalic.ttf"),
     });
     const store = useStore();
-    const authToken = getItem(SECURE_STORE_VARS.authToken);
-    const authService = useAuthService(store, authToken);
+    const [state, dispatch] = store;
+    const authService = useAuthService(store);
+
+    useLayoutEffect(() => {
+        (async () => {
+            dispatch({
+                type: "SET_TOKEN",
+                data: {
+                    values: {
+                        auth_t: await getItemAsync(SECURE_STORE_VARS.authToken),
+                    },
+                },
+            });
+        })();
+    }, []);
 
     useEffect(() => {
         if (loaded) {
             SplashScreen.hideAsync();
 
-            (async () => {
-                if (authToken !== null) {
-                    await authService.login(authToken);
-                }
-            })();
+            if (!state.user.loggedIn && !!state.user.auth_t) {
+                authService.login(state.user.auth_t);
+            }
         }
     }, [loaded]);
 
@@ -70,32 +81,4 @@ export default function RootLayout() {
             </AppContextConsumer>
         </AppContextProvider>
     );
-
-    // return (
-    //     <AppContextProvider store={store} authService={authService}>
-    //         <Stack
-    //             initialRouteName="(screens)/login"
-    //             // {
-    //             //     !state || !state.user || !state.user.loggedIn
-    //             //         ? "(screens)/login"
-    //             //         : "(tabs)"
-    //             // }
-    //         >
-    //             <Stack.Screen
-    //                 name="(screens)/login"
-    //                 options={{ headerShown: false }}
-    //             />
-    //             {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
-    //             <Stack.Screen
-    //                 name="(screens)/camera"
-    //                 options={{ headerShown: false }}
-    //             />
-    //             <Stack.Screen
-    //                 name="(screens)/component_test"
-    //                 options={{ headerShown: false }}
-    //             />
-    //         </Stack>
-    //         <StatusBar style="light" />
-    //     </AppContextProvider>
-    // );
 }

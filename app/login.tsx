@@ -1,11 +1,11 @@
+import { useRouter } from "expo-router";
 import React, { useContext, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { useRouter } from "expo-router";
 
-import { AppContext } from "@/context/AppContext";
 import LocalizedButton from "@/components/buttons/i18n/LocalizedButton";
 import { BaseContainer } from "@/components/container/BaseContainer";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
+import { AppContext } from "@/context/AppContext";
 import globalStyles from "@/util/globalStyles";
 
 export default () => {

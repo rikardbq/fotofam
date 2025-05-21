@@ -12,8 +12,7 @@ const serviceNames = {
 };
 
 const services: { [key: string]: any } = {
-    AUTH_SERVICE: (store: Store, authToken: string | null) =>
-        new AuthService(store, authToken),
+    AUTH_SERVICE: (store: Store) => new AuthService(store),
     IMAGE_SERVICE: (store: Store) => new ImageService(store),
     // USER_SERVICE: (store: any) => new UserService(store),
 };
@@ -30,12 +29,9 @@ export const useImageService = (store: Store): ImageService => {
     return service;
 };
 
-export const useAuthService = (
-    store: Store,
-    authToken: string | null
-): AuthService => {
+export const useAuthService = (store: Store): AuthService => {
     const service = useMemo(
-        () => getService(serviceNames.AUTH_SERVICE, store, authToken),
+        () => getService(serviceNames.AUTH_SERVICE, store),
         [store[0]]
     );
 
