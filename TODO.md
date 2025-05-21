@@ -22,9 +22,11 @@
     - [x] Handle token login during application onLoad
     - [x] Login screen
 
-- [x] use localstorage
-    - [x] refresh token
+- [x] use expo-secure-store
+    - [x] refresh token (auth_t)
+    - [x] selected color scheme (user_color_scheme)
     - [ ] store images by posts id. A post looks at storage before asking for its image from the DB
+        - use JS Map type to manipulate items. secure-store key "images": [ ["key", "val" ], ["key2", "val2"] ];
     - [ ] never fetch / refetch posts unless first load or manually called refresh
 
 - [x] manage images from camera roll to be loaded on demand
@@ -58,10 +60,6 @@
 
 #### POSTS
 
-- [ ] comment object type
-    - sender
-    - message
-
 - [ ] media object type
     - source
     - type
@@ -70,9 +68,8 @@
     - media
         - media_object
     - description_text
-    - comments array
-        - comment_object
 
 #### POST SCREEN
 
-- [ ] post layout (re-use across feed screen and personal screen)
+- [x] post layout (re-use across feed screen and personal screen)
+- 

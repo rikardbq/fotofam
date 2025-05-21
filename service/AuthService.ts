@@ -90,6 +90,7 @@ export default class AuthService {
             console.error(status);
 
             if (status === 401 || status === 403) {
+                this.authToken = null;
                 await deleteItemAsync(SECURE_STORE_VARS.authToken);
             }
 

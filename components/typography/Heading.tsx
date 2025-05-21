@@ -16,7 +16,7 @@ export const HeadingText = ({ size = "sm", children, style }: HeadingText) => {
         <Text
             style={[
                 globalStyles.font,
-                { fontSize: FONT_SIZES[size], fontFamily: FONT_NAMES.RUBIK_REGULAR },
+                { fontSize: FONT_SIZES[size], fontFamily: FONT_NAMES.RUBIK_MEDIUM },
                 style,
             ]}
         >

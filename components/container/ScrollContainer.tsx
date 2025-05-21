@@ -2,6 +2,8 @@ import { StyleSheet } from "react-native";
 import Animated, { AnimatedScrollViewProps } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { PADDINGS } from "@/util/globalStyles";
+
 const styles = StyleSheet.create({
     scroll_container: {
         overflow: "hidden",
@@ -28,10 +30,10 @@ export const ScrollContainer = ({
             contentContainerStyle={[
                 {
                     // backgroundColor: "#000", // for debug
-                    paddingTop: insets.top + 6,
-                    paddingBottom: insets.bottom + 6,
-                    paddingLeft: insets.left + 6,
-                    paddingRight: insets.right + 6,
+                    paddingTop: insets.top + PADDINGS.sm,
+                    paddingBottom: insets.bottom + PADDINGS.sm,
+                    paddingLeft: insets.left + PADDINGS.sm,
+                    paddingRight: insets.right + PADDINGS.sm,
                 },
                 styles.scroll_container,
                 contentContainerStyle,

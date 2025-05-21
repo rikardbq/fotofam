@@ -1,7 +1,15 @@
 import { StyleSheet } from "react-native";
 import { FONT_NAMES } from "./constants";
 
-export const PADDINGS: Record<string, number> = {
+type Sizes = {
+    sm: number;
+    md: number;
+    lg: number;
+    xl: number;
+    "2xl": number;
+};
+
+export const PADDINGS: Sizes = {
     sm: 4,
     md: 6,
     lg: 8,
@@ -9,7 +17,7 @@ export const PADDINGS: Record<string, number> = {
     "2xl": 14,
 };
 
-export const FONT_SIZES = {
+export const FONT_SIZES: Sizes = {
     sm: 14,
     md: 16,
     lg: 18,

@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
         flex: 1,
         // height: 400,
         backgroundColor: "orange",
-        borderRadius: 6,
+        // borderRadius: 10,
         overflow: "hidden",
     },
     header: {

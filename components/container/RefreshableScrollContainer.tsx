@@ -75,9 +75,9 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
 
     const updatePanState = (offset: number) => {
         "worklet";
-        if (offset >= 4) {
+        if (offset > 0) {
             runOnJS(setIsPanEnabled)(false);
-        } else if (offset < 4) {
+        } else if (offset === 0) {
             runOnJS(setIsPanEnabled)(true);
         }
     };
