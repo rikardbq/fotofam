@@ -40,3 +40,4 @@ yarn-error.*
 # custom
 .idea
 .vscode
+android/
