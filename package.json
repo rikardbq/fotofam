@@ -3,8 +3,8 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "eas-build-dev-android": "eas build --platform android --profile development",
-    "eas-build-prod-android": "eas build --platform android --profile production",
+    "eas-build-dev-android": "expo prebuild && eas build --platform android --profile development",
+    "eas-build-prod-android": "expo prebuild && eas build --platform android --profile production",
     "eas-update-local-binary-android": "eas build:run --platform android --profile development",
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
