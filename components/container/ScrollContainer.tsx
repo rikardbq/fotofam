@@ -30,10 +30,10 @@ export const ScrollContainer = ({
             contentContainerStyle={[
                 {
                     // backgroundColor: "#000", // for debug
-                    paddingTop: insets.top + PADDINGS.sm,
-                    paddingBottom: insets.bottom + PADDINGS.sm,
-                    paddingLeft: insets.left + PADDINGS.sm,
-                    paddingRight: insets.right + PADDINGS.sm,
+                    paddingTop: insets.top + PADDINGS.lg,
+                    paddingBottom: insets.bottom + PADDINGS.lg,
+                    paddingLeft: 0,
+                    paddingRight: 0,
                 },
                 styles.scroll_container,
                 contentContainerStyle,

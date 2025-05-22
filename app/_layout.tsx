@@ -1,6 +1,6 @@
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import { getItemAsync } from "expo-secure-store";
+import { getItem } from "expo-secure-store";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useLayoutEffect } from "react";
@@ -45,16 +45,14 @@ export default function RootLayout() {
     const authService = useAuthService(store);
 
     useLayoutEffect(() => {
-        (async () => {
-            dispatch({
-                type: "SET_TOKEN",
-                data: {
-                    values: {
-                        auth_t: await getItemAsync(SECURE_STORE_VARS.authToken),
-                    },
+        dispatch({
+            type: "SET_TOKEN",
+            data: {
+                values: {
+                    auth_t: getItem(SECURE_STORE_VARS.authToken),
                 },
-            });
-        })();
+            },
+        });
     }, []);
 
     useEffect(() => {
@@ -73,10 +71,20 @@ export default function RootLayout() {
 
     return (
         <AppContextProvider store={store} authService={authService}>
-            <Stack screenOptions={{ headerShown: false }} />
             <AppContextConsumer>
-                {({ colorScheme }: AppContextDefaultState) => (
-                    <StatusBar style={getStatusBarStyle(colorScheme)} />
+                {({ colorScheme, theme }: AppContextDefaultState) => (
+                    <>
+                        <Stack
+                            screenOptions={{
+                                animation: "none",
+                                headerShown: false,
+                                contentStyle: {
+                                    backgroundColor: theme.colors.BG0,
+                                },
+                            }}
+                        />
+                        <StatusBar style={getStatusBarStyle(colorScheme)} />
+                    </>
                 )}
             </AppContextConsumer>
         </AppContextProvider>

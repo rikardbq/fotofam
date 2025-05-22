@@ -6,7 +6,7 @@ import { Stack } from "expo-router";
 
 export default () => {
     return (
-        <Stack screenOptions={{ headerShown: false }}>
+        <Stack screenOptions={{ animation: "none", headerShown: false }}>
             <Stack.Screen name="index" />
             <Stack.Screen name="camera" />
         </Stack>

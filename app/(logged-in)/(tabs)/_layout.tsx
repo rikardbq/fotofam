@@ -36,10 +36,11 @@ export default () => {
             tabBar={(props: BottomTabBarProps) => <TabBar {...props} />}
             backBehavior="firstRoute"
             screenOptions={{
+                animation: "none",
+                headerShown: false,
                 tabBarActiveTintColor: "#fff",
                 tabBarActiveBackgroundColor: "#000",
                 tabBarInactiveBackgroundColor: "#000",
-                headerShown: false,
                 tabBarStyle: Platform.select({
                     ios: {
                         // Use a transparent background on iOS to show the blur effect
