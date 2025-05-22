@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Animated, StyleSheet, Easing } from "react-native";
+import { Animated, Easing, StyleSheet } from "react-native";
 
 const Spinner = () => {
     const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -49,7 +49,7 @@ const Spinner = () => {
         //     ])
         // ).start();
     }, [
-        rotateAnim, 
+        rotateAnim,
         // thicknessAnim
     ]);
 
@@ -77,8 +77,11 @@ const styles = StyleSheet.create({
         height: 40,
         borderWidth: 4,
         borderTopWidth: 10,
-        borderColor: "#000", // visible rotating part
         borderRadius: 20,
+        borderColor: "#000000", // visible rotating part
+        backgroundColor: "#ffffff",
+        alignItems: "center",
+        overflow: "hidden",
     },
 });
 

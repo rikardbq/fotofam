@@ -2,8 +2,7 @@ import { deleteItemAsync, setItemAsync } from "expo-secure-store";
 import { decodeJwt } from "jose";
 
 import * as api from "@/api";
-import { Action, Store } from "@/reducer";
-import { UserState } from "@/reducer/userReducer";
+import { Action, State, Store } from "@/reducer";
 import { createAuthHeader, generateSignature, TokenClaims } from "@/util/auth";
 import { SECURE_STORE_VARS } from "@/util/constants";
 
@@ -13,16 +12,16 @@ export type AuthRequest = {
 };
 
 export default class AuthService {
-    private state: UserState;
+    private state: State;
     private dispatch: React.Dispatch<Action>;
     private baseUrl: string = "http://192.168.0.22:8082"; // use env var in real scenario. start using dotenv files
 
     constructor([state, dispatch]: Store) {
-        this.state = state.user;
+        this.state = state;
         this.dispatch = dispatch;
     }
 
-    async authenticate(username: string, password: string) {
+    async authenticate(username: string, password: string): Promise<string> {
         try {
             const {
                 data: { token: at },
@@ -52,7 +51,7 @@ export default class AuthService {
         }
     }
 
-    async login(rt: string) {
+    async login(rt: string): Promise<void> {
         try {
             const {
                 data: { token },
@@ -95,7 +94,7 @@ export default class AuthService {
         }
     }
 
-    async logout() {
+    async logout(): Promise<void> {
         try {
             this.dispatch({
                 type: "LOGOUT_USER",
@@ -103,7 +102,7 @@ export default class AuthService {
 
             await deleteItemAsync(SECURE_STORE_VARS.authToken);
             await api.post(
-                `${this.baseUrl}/revoke/${this.state.username}`,
+                `${this.baseUrl}/revoke/${this.state.user.username}`,
                 undefined
             );
         } catch (error: any) {
