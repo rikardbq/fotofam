@@ -2,10 +2,13 @@ import { BaseContainer } from "@/components/container/BaseContainer";
 import { RefreshableScrollContainer } from "@/components/container/RefreshableScrollContainer";
 import { Post } from "@/components/post/Post";
 import { AppContext } from "@/context/AppContext";
+import axios from "axios";
 import Constants from "expo-constants";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { appID } from "@/fotofamExtra.json";
+import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
 const statusBarHeight = Constants.statusBarHeight;
 
 export default (props: any) => {
@@ -13,10 +16,30 @@ export default (props: any) => {
     const { store, theme, colorScheme, setColorScheme } =
         useContext(AppContext);
     const [state, dispatch] = store;
+    const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        console.log("wasup", state);
-    }, [state]);
+        (async () => {
+            try {
+                const { data } = await axios.get(
+                    `http://192.168.0.22:8082/posts/${state.user.username}?limit=10&offset=0`,
+                    {
+                        headers: {
+                            "x-api-key": "api_123_key",
+                            origin: appID,
+                            authorization: `Bearer ${state.user.auth_t}`,
+                            "Content-Type": "application/json",
+                            Accept: "application/json",
+                        },
+                    }
+                );
+
+                setPosts(data);
+            } catch (error: any) {
+                console.log(error);
+            }
+        })();
+    }, []);
 
     const testHeight = Dimensions.get("window").height * 0.75;
 
@@ -86,7 +109,28 @@ export default (props: any) => {
 
             <RefreshableScrollContainer contentContainerStyle={{ gap: 12 }}>
                 {/* <ScrollContainer style={styles.test}> */}
-                <Post
+                {/* {Object.values(images).map((img: any) => (
+                    <Post
+                        key={img.name}
+                        imageProps={{
+                            src: `file://${img.base64}`,
+                            height: img.height,
+                            width: img.width,
+                        }}
+                        description={img.name}
+                    />
+                ))} */}
+                {posts.map((post: any) => {
+                    console.log(post.image_name);
+                    return (
+                        <Post
+                            key={post.image_name}
+                            post={post}
+                            description={post.description}
+                        />
+                    );
+                })}
+                {/* <Post
                     imageProps={{
                         src: `file://${state.image.croppedPhoto.path}`,
                         height: state.image.croppedPhoto.height,
@@ -127,7 +171,7 @@ export default (props: any) => {
                         height: state.image.croppedPhoto.height,
                         width: state.image.croppedPhoto.width,
                     }}
-                />
+                /> */}
                 {/* <Image
                     // source={{ uri: currentPhoto }} // used for blob object url
                     src={`file://${currentPhoto}`}

@@ -1,4 +1,3 @@
-import { SCREENS } from "@/util/constants";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import {
     Button,
