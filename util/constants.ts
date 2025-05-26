@@ -23,4 +23,15 @@ export const FONT_NAMES = {
     RUBIK_REGULAR_ITALIC: "RubikRegularItalic",
     RUBIK_MEDIUM_ITALIC: "RubikMediumItalic",
     RUBIK_BOLD_ITALIC: "RubikBoldItalic",
-}
+};
+
+export const CACHE = {
+    STATEMENTS: {
+        INSERT: {
+            IMAGE: "INSERT INTO images (name, width, height, base64) VALUES ($name, $width, $height, $base64)",
+        },
+        GET: {
+            IMAGE: "SELECT name, width, height, base64 FROM images WHERE name = $name",
+        },
+    },
+};

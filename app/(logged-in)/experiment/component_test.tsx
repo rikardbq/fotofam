@@ -20,8 +20,8 @@ export default () => {
     const navigation = useNavigation();
     const someRandomAppID = "FFFE"; // this will live in some JSON or other file where it can be imported from, generated once and kept safe to maintain token validity for all tokens issued for this app, backend checks against registered client apps
 
-    const handleLoginFlow = async (body: any) => {
-        const rt = await authService.authenticate(body);
+    const handleLoginFlow = async (username: string, password: string) => {
+        const rt = await authService.authenticate(username, password);
         const resp = await authService.login(rt);
         console.log(resp);
     };
@@ -126,11 +126,7 @@ export default () => {
                         label="Handle login flow"
                         onPress={() => {
                             // login();
-                            handleLoginFlow({
-                                applicationId: someRandomAppID,
-                                username,
-                                password: encodePassword(password),
-                            });
+                            handleLoginFlow(username, encodePassword(password));
                         }}
                     />
                     <LocalizedButton

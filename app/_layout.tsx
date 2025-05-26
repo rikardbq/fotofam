@@ -2,8 +2,9 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { getItem } from "expo-secure-store";
 import * as SplashScreen from "expo-splash-screen";
+import { SQLiteProvider } from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useLayoutEffect } from "react";
+import { Suspense, useEffect, useLayoutEffect } from "react";
 
 import {
     AppContextConsumer,
@@ -14,6 +15,7 @@ import {
 import { useAuthService } from "@/hooks/useService";
 import { useStore } from "@/hooks/useStore";
 import { ColorSchemes } from "@/hooks/useTheme";
+import { initCache } from "@/util/cache";
 import { FONT_NAMES, SECURE_STORE_VARS } from "@/util/constants";
 
 SplashScreen.preventAutoHideAsync();
@@ -70,23 +72,33 @@ export default function RootLayout() {
     }
 
     return (
-        <AppContextProvider store={store} authService={authService}>
-            <AppContextConsumer>
-                {({ colorScheme, theme }: AppContextDefaultState) => (
-                    <>
-                        <Stack
-                            screenOptions={{
-                                animation: "none",
-                                headerShown: false,
-                                contentStyle: {
-                                    backgroundColor: theme.colors.BG0,
-                                },
-                            }}
-                        />
-                        <StatusBar style={getStatusBarStyle(colorScheme)} />
-                    </>
-                )}
-            </AppContextConsumer>
-        </AppContextProvider>
+        <Suspense fallback={null}>
+            <SQLiteProvider
+                databaseName="cache.db"
+                onInit={initCache}
+                useSuspense
+            >
+                <AppContextProvider store={store} authService={authService}>
+                    <AppContextConsumer>
+                        {({ colorScheme, theme }: AppContextDefaultState) => (
+                            <>
+                                <Stack
+                                    screenOptions={{
+                                        animation: "none",
+                                        headerShown: false,
+                                        contentStyle: {
+                                            backgroundColor: theme.colors.BG0,
+                                        },
+                                    }}
+                                />
+                                <StatusBar
+                                    style={getStatusBarStyle(colorScheme)}
+                                />
+                            </>
+                        )}
+                    </AppContextConsumer>
+                </AppContextProvider>
+            </SQLiteProvider>
+        </Suspense>
     );
 }

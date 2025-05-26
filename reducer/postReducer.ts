@@ -1,15 +1,26 @@
 import { Action as RootAction } from "@/reducer";
 
 const actions = {
-    SET_POSTS: "SET_POSTS",
+    SET_POSTS_FEED: "SET_POSTS_FEED",
+    SET_POSTS_PERSONAL: "SET_POSTS_PERSONAL",
 };
 
 export type PostState = {
-    posts?: any[];
+    feed: {
+        posts?: any[];
+    };
+    personal: {
+        posts?: any[];
+    };
 };
 
 const initialState: PostState = {
-    posts: undefined,
+    feed: {
+        posts: undefined,
+    },
+    personal: {
+        posts: undefined,
+    },
 };
 
 type Action = RootAction & {
@@ -20,10 +31,22 @@ type Action = RootAction & {
 
 const reducer = (state: PostState, action: Action) => {
     switch (action.type) {
-        case actions.SET_POSTS: {
+        case actions.SET_POSTS_FEED: {
             return {
                 ...state,
-                posts: action.data.values.posts,
+                feed: {
+                    ...state?.feed,
+                    posts: action.data.values.posts,
+                },
+            };
+        }
+        case actions.SET_POSTS_PERSONAL: {
+            return {
+                ...state,
+                personal: {
+                    ...state?.personal,
+                    posts: action.data.values.posts,
+                },
             };
         }
     }

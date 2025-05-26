@@ -3,12 +3,12 @@ import React, { createContext } from "react";
 import { useI18N } from "@/hooks/useI18N";
 import AuthService from "@/service/AuthService";
 
+import { usePostService } from "@/hooks/useService";
 import { ColorSchemes, useTheme } from "@/hooks/useTheme";
 import { I18NBase, languages } from "@/i18n";
 import { Action, State, Store } from "@/reducer";
-import { AppTheme } from "@/util/theme";
 import PostService from "@/service/PostService";
-import { usePostService } from "@/hooks/useService";
+import { AppTheme } from "@/util/theme";
 
 export type AppContextDefaultState = {
     theme: AppTheme;

@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from "react";
 import { appID } from "@/fotofamExtra.json";
 import axios from "axios";
 import { AppContext } from "@/context/AppContext";
+import { useSQLiteContext } from "expo-sqlite";
+import { CACHE } from "@/util/constants";
 
 const styles = StyleSheet.create({
     spinner: {
@@ -56,13 +58,19 @@ type PostProps = {
 
 export const Post = ({ post, description }: PostProps) => {
     const { store, postService } = useContext(AppContext);
+    const db = useSQLiteContext();
     const [state, _] = store;
     const [image, setImage] = useState<any>({});
 
     useEffect(() => {
-        postService.getImageByName(post.image_name).then((img) => {
-            setImage(img);
-        });
+        (async () => {
+            await postService.getImageByName(
+                post.image_name,
+                setImage,
+                db
+            );
+            
+        })();
     }, []);
 
     return (

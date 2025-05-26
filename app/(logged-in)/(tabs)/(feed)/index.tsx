@@ -2,23 +2,25 @@ import { BaseContainer } from "@/components/container/BaseContainer";
 import { RefreshableScrollContainer } from "@/components/container/RefreshableScrollContainer";
 import { Post } from "@/components/post/Post";
 import { AppContext } from "@/context/AppContext";
-import axios from "axios";
+import { useNavigation } from "@/hooks/useNavigation";
+import { useLinkProps, useLinkTo } from "@react-navigation/native";
 import Constants from "expo-constants";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Link } from "expo-router";
+import { useContext, useEffect } from "react";
+import { Dimensions, Pressable, StyleSheet, TouchableHighlight, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { appID } from "@/fotofamExtra.json";
-import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
 const statusBarHeight = Constants.statusBarHeight;
 
-export default (props: any) => {
+export default () => {
     const insets = useSafeAreaInsets();
     const { store, theme, colorScheme, setColorScheme, postService } =
         useContext(AppContext);
+    const navigation = useNavigation();
+   const linkTo = useLinkTo();
     const [state, _] = store;
 
     useEffect(() => {
-        postService.getPosts();
+        postService.getPostsForFeed();
     }, []);
 
     const testHeight = Dimensions.get("window").height * 0.75;
@@ -100,13 +102,22 @@ export default (props: any) => {
                         description={img.name}
                     />
                 ))} */}
-                {state.post?.posts?.map((post: any) => {
+                {state.post?.feed.posts?.map((post: any) => {
                     return (
-                        <Post
+                        <Pressable
+                        onPress={() => linkTo(`/post/${post.image_name}`)}
                             key={post.image_name}
-                            post={post}
-                            description={post.description}
-                        />
+                            style={{
+                                flex: 1,
+                                backgroundColor: "red",
+                            }}
+                        >
+                            
+                            <Post
+                                post={post}
+                                description={post.image_name}
+                            />
+                        </Pressable>
                     );
                 })}
                 {/* <Post
