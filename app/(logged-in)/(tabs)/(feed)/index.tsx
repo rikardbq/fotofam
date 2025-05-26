@@ -3,11 +3,10 @@ import { RefreshableScrollContainer } from "@/components/container/RefreshableSc
 import { Post } from "@/components/post/Post";
 import { AppContext } from "@/context/AppContext";
 import { useNavigation } from "@/hooks/useNavigation";
-import { useLinkProps, useLinkTo } from "@react-navigation/native";
+import { useLinkTo } from "@react-navigation/native";
 import Constants from "expo-constants";
-import { Link } from "expo-router";
 import { useContext, useEffect } from "react";
-import { Dimensions, Pressable, StyleSheet, TouchableHighlight, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -16,7 +15,7 @@ export default () => {
     const { store, theme, colorScheme, setColorScheme, postService } =
         useContext(AppContext);
     const navigation = useNavigation();
-   const linkTo = useLinkTo();
+    const linkTo = useLinkTo();
     const [state, _] = store;
 
     useEffect(() => {
@@ -89,7 +88,10 @@ export default () => {
                     </Link>
                 </View> */}
 
-            <RefreshableScrollContainer contentContainerStyle={{ gap: 12 }}>
+            <RefreshableScrollContainer
+                route="feed"
+                contentContainerStyle={{ gap: 12 }}
+            >
                 {/* <ScrollContainer style={styles.test}> */}
                 {/* {Object.values(images).map((img: any) => (
                     <Post
@@ -105,18 +107,14 @@ export default () => {
                 {state.post?.feed.posts?.map((post: any) => {
                     return (
                         <Pressable
-                        onPress={() => linkTo(`/post/${post.image_name}`)}
-                            key={post.image_name}
+                            onPress={() => linkTo(`/post/${post.image_name}`)}
+                            key={`${post.id}_${post.image_name}`}
                             style={{
                                 flex: 1,
                                 backgroundColor: "red",
                             }}
                         >
-                            
-                            <Post
-                                post={post}
-                                description={post.image_name}
-                            />
+                            <Post post={post} description={post.image_name} />
                         </Pressable>
                     );
                 })}

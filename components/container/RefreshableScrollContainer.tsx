@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import {
     Gesture,
@@ -21,9 +21,8 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle } from "react-native-svg";
 
+import { AppContext } from "@/context/AppContext";
 import { ScrollContainer } from "./ScrollContainer";
-import { resetCache } from "@/util/cache";
-import { useSQLiteContext } from "expo-sqlite";
 
 const REFRESH_CIRCLE_SIZE = 42;
 const REFRESH_CIRCLE_BG_SIZE = REFRESH_CIRCLE_SIZE + 4;
@@ -61,8 +60,12 @@ const styles = StyleSheet.create({
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
-    const db = useSQLiteContext();
+export const RefreshableScrollContainer = ({
+    route,
+    children,
+    ...rest
+}: any) => {
+    const { postService } = useContext(AppContext);
     const insets = useSafeAreaInsets();
     const REFRESH_CIRCLE_INITIAL_POS = useMemo(
         () => insets.top + 12,
@@ -79,7 +82,8 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
 
     useEffect(() => {
         if (shouldRefresh) {
-            resetCache(db);
+            if (route === "feed") postService.getPostsForFeed();
+            if (route === "personal") postService.getPostsForPersonal();
         }
     }, [shouldRefresh]);
 
@@ -106,11 +110,9 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
                 refreshCircleStroke.value =
                     REFRESH_CIRCLE_INITIAL_DASHOFFSET -
                     REFRESH_CIRCLE_INITIAL_DASHOFFSET * clampPercent;
-                
+
                 if (clampPercent === 1) {
                     runOnJS(setShouldRefresh)(true);
-                } else {
-                    runOnJS(setShouldRefresh)(false);
                 }
             }
         })
@@ -125,24 +127,20 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
                 REFRESH_CIRCLE_INITIAL_DASHOFFSET
             );
 
-            if (translationY >= REFRESH_CIRCLE_INITIAL_POS) {
-                refreshCirclePos.value = withDelay(
-                    REFRESH_CIRCLE_RESET_POSITION_DELAY,
-                    refreshCircleResetPosAnim
-                );
-                refreshCircleOpacity.value = withDelay(
-                    REFRESH_CIRCLE_RESET_POSITION_DELAY,
-                    refreshCircleResetOpacityAnim
-                );
-                refreshCircleStroke.value = withDelay(
-                    REFRESH_CIRCLE_RESET_POSITION_DELAY,
-                    refreshCircleResetStrokeAnim
-                );
-            } else {
-                refreshCirclePos.value = refreshCircleResetPosAnim;
-                refreshCircleOpacity.value = refreshCircleResetOpacityAnim;
-                refreshCircleStroke.value = refreshCircleResetStrokeAnim;
-            }
+            refreshCirclePos.value = withDelay(
+                REFRESH_CIRCLE_RESET_POSITION_DELAY,
+                refreshCircleResetPosAnim
+            );
+            refreshCircleOpacity.value = withDelay(
+                REFRESH_CIRCLE_RESET_POSITION_DELAY,
+                refreshCircleResetOpacityAnim
+            );
+            refreshCircleStroke.value = withDelay(
+                REFRESH_CIRCLE_RESET_POSITION_DELAY,
+                refreshCircleResetStrokeAnim
+            );
+
+            runOnJS(setShouldRefresh)(false);
         })
         .enabled(isPanEnabled);
 

@@ -11,6 +11,7 @@ export const ROUTES = {
 
 export const SECURE_STORE_VARS = {
     authToken: "auth_t",
+    lastLogin: "last_login",
     colorScheme: "user_color_scheme",
 };
 

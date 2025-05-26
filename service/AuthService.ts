@@ -5,6 +5,7 @@ import * as api from "@/api";
 import { Action, State, Store } from "@/reducer";
 import { createAuthHeader, generateSignature, TokenClaims } from "@/util/auth";
 import { SECURE_STORE_VARS } from "@/util/constants";
+import { nowSeconds } from "@/util/time";
 
 export type AuthRequest = {
     username: string;
@@ -66,6 +67,7 @@ export default class AuthService {
             });
 
             await setItemAsync(SECURE_STORE_VARS.authToken, token);
+            await setItemAsync(SECURE_STORE_VARS.lastLogin, nowSeconds().toString())
         } catch (error: any) {
             const response = error.response;
             const path = response.request.responseURL;

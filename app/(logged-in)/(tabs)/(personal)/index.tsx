@@ -1,5 +1,5 @@
 import LocalizedButton from "@/components/buttons/i18n/LocalizedButton";
-import { ScrollContainer } from "@/components/container/ScrollContainer";
+import { RefreshableScrollContainer } from "@/components/container/RefreshableScrollContainer";
 import { AppContext } from "@/context/AppContext";
 import { useNavigation } from "@/hooks/useNavigation";
 import { useImageService } from "@/hooks/useService";
@@ -60,7 +60,7 @@ export default function Index(props: any) {
     };
 
     return (
-        <ScrollContainer>
+        <RefreshableScrollContainer route="personal">
             <LocalizedButton
                 label="label.login"
                 onPress={() => nav.navigate("experiment/component_test")}
@@ -89,6 +89,6 @@ export default function Index(props: any) {
                     }}
                 />
             ))}
-        </ScrollContainer>
+        </RefreshableScrollContainer>
     );
 }

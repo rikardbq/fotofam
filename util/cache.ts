@@ -13,11 +13,11 @@ export const initCache = async (db: SQLiteDatabase) => {
     `);
 };
 
+// only useful if AUTOINCREMENT on PK
+// UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='images';
+
 export const resetCache = async (db: SQLiteDatabase) => {
-    await db.execAsync(`
-        DELETE FROM images;
-        UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='images';
-    `);
+    await db.execAsync("DELETE FROM images;");
 };
 
 export const vacuumCache = async (db: SQLiteDatabase) => {
