@@ -9,6 +9,7 @@ export type TokenClaims = {
     iat: number;
     exp: number;
     "x-uname": string;
+    "x-rname": string;
     "x-aid": string;
 };
 

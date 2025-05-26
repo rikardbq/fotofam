@@ -7,6 +7,8 @@ import { ColorSchemes, useTheme } from "@/hooks/useTheme";
 import { I18NBase, languages } from "@/i18n";
 import { Action, State, Store } from "@/reducer";
 import { AppTheme } from "@/util/theme";
+import PostService from "@/service/PostService";
+import { usePostService } from "@/hooks/useService";
 
 export type AppContextDefaultState = {
     theme: AppTheme;
@@ -15,6 +17,7 @@ export type AppContextDefaultState = {
     store: Store;
     localization: I18NBase;
     authService: AuthService;
+    postService: PostService;
 };
 
 export const AppContext: React.Context<AppContextDefaultState> =
@@ -27,6 +30,7 @@ export const AppContext: React.Context<AppContextDefaultState> =
         store: [{} as State, {} as React.Dispatch<Action>],
         localization: {} as I18NBase,
         authService: {} as AuthService,
+        postService: {} as PostService,
     });
 
 type AppContextProviderProps = {
@@ -42,6 +46,7 @@ export const AppContextProvider = ({
 }: AppContextProviderProps) => {
     const localization = useI18N(languages.swe);
     const { theme, colorScheme, setColorScheme } = useTheme();
+    const postService = usePostService(store);
 
     return (
         <AppContext.Provider
@@ -52,6 +57,7 @@ export const AppContextProvider = ({
                 store,
                 localization,
                 authService,
+                postService,
             }}
         >
             {children}

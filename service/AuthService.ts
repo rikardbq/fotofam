@@ -14,7 +14,6 @@ export type AuthRequest = {
 export default class AuthService {
     private state: State;
     private dispatch: React.Dispatch<Action>;
-    private baseUrl: string = "http://192.168.0.22:8082"; // use env var in real scenario. start using dotenv files
 
     constructor([state, dispatch]: Store) {
         this.state = state;
@@ -25,18 +24,14 @@ export default class AuthService {
         try {
             const {
                 data: { token: at },
-            } = await api.post(`${this.baseUrl}/authenticate`, {
+            } = await api.post("authenticate", {
                 username,
                 password: await generateSignature(username, password),
             });
 
             const {
                 data: { token: rt },
-            } = await api.post(
-                `${this.baseUrl}/authorize`,
-                undefined,
-                createAuthHeader(at)
-            );
+            } = await api.post("authorize", undefined, createAuthHeader(at));
 
             return rt;
         } catch (error: any) {
@@ -55,11 +50,7 @@ export default class AuthService {
         try {
             const {
                 data: { token },
-            } = await api.post(
-                `${this.baseUrl}/login`,
-                undefined,
-                createAuthHeader(rt)
-            );
+            } = await api.post("login", undefined, createAuthHeader(rt));
 
             const decodedToken: TokenClaims = decodeJwt(token);
             this.dispatch({
@@ -69,6 +60,7 @@ export default class AuthService {
                         auth_t: token,
                         loggedIn: true,
                         username: decodedToken["x-uname"],
+                        realName : decodedToken["x-rname"],
                     },
                 },
             });
@@ -101,10 +93,7 @@ export default class AuthService {
             });
 
             await deleteItemAsync(SECURE_STORE_VARS.authToken);
-            await api.post(
-                `${this.baseUrl}/revoke/${this.state.user.username}`,
-                undefined
-            );
+            await api.post(`revoke/${this.state.user.username}`, undefined);
         } catch (error: any) {
             const response = error.response;
             const path = response.request.responseURL;

@@ -13,32 +13,12 @@ const statusBarHeight = Constants.statusBarHeight;
 
 export default (props: any) => {
     const insets = useSafeAreaInsets();
-    const { store, theme, colorScheme, setColorScheme } =
+    const { store, theme, colorScheme, setColorScheme, postService } =
         useContext(AppContext);
-    const [state, dispatch] = store;
-    const [posts, setPosts] = useState([]);
+    const [state, _] = store;
 
     useEffect(() => {
-        (async () => {
-            try {
-                const { data } = await axios.get(
-                    `http://192.168.0.22:8082/posts/${state.user.username}?limit=10&offset=0`,
-                    {
-                        headers: {
-                            "x-api-key": "api_123_key",
-                            origin: appID,
-                            authorization: `Bearer ${state.user.auth_t}`,
-                            "Content-Type": "application/json",
-                            Accept: "application/json",
-                        },
-                    }
-                );
-
-                setPosts(data);
-            } catch (error: any) {
-                console.log(error);
-            }
-        })();
+        postService.getPosts();
     }, []);
 
     const testHeight = Dimensions.get("window").height * 0.75;
@@ -120,8 +100,7 @@ export default (props: any) => {
                         description={img.name}
                     />
                 ))} */}
-                {posts.map((post: any) => {
-                    console.log(post.image_name);
+                {state.post?.posts?.map((post: any) => {
                     return (
                         <Post
                             key={post.image_name}

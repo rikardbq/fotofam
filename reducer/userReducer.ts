@@ -41,6 +41,7 @@ const reducer = (state: UserState, action: Action) => {
                 auth_t: action.data.values.auth_t,
                 loggedIn: action.data.values.loggedIn,
                 username: action.data.values.username,
+                realName: action.data.values.realName,
             };
         }
         case actions.LOGOUT_USER: {

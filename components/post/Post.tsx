@@ -25,17 +25,25 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
-        padding: PADDINGS.xl,
+        paddingTop: PADDINGS.lg,
+        paddingBottom: PADDINGS.lg,
+        paddingLeft: PADDINGS.md,
+        paddingRight: PADDINGS.md,
         // backgroundColor: "#242424", //"green",
         // color: "#fff"
     },
     footer: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        flexWrap: "wrap",
         paddingTop: PADDINGS.lg,
         paddingBottom: PADDINGS.lg,
-        paddingLeft: PADDINGS.sm,
-        paddingRight: PADDINGS.sm,
+        paddingLeft: PADDINGS.md,
+        paddingRight: PADDINGS.md,
         // backgroundColor: "#242424", //"red"
-        color: "#fff",
+    },
+    footerText: {
+        color: "#ffffff",
     },
 });
 
@@ -47,35 +55,19 @@ type PostProps = {
 // const screenAspectRatio = Dimensions.get("window").height / Dimensions.get("window").width;
 
 export const Post = ({ post, description }: PostProps) => {
-    const { store } = useContext(AppContext);
-    const [state, dispatch] = store;
+    const { store, postService } = useContext(AppContext);
+    const [state, _] = store;
     const [image, setImage] = useState<any>({});
 
     useEffect(() => {
-        (async () => {
-            const { data } = await axios.get(
-                `http://192.168.0.22:8082/images/${post.image_name}`,
-                {
-                    headers: {
-                        "x-api-key": "api_123_key",
-                        origin: appID,
-                        authorization: `Bearer ${state.user.auth_t}`,
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                }
-            );
-
-            console.log("resolve -> ", data.name);
-            
-
-            setImage(data);
-        })();
+        postService.getImageByName(post.image_name).then((img) => {
+            setImage(img);
+        });
     }, []);
 
     return (
         <View style={styles.container}>
-            <Header style={styles.header} username="rikardbq" />
+            <Header style={styles.header} name={state.user.realName ?? ""} />
             {!image.base64 ? (
                 <View style={styles.spinner}>
                     <Spinner />
@@ -108,14 +100,14 @@ export const Post = ({ post, description }: PostProps) => {
 
 type HeaderProps = {
     style: typeof styles.header;
-    username: string;
+    name: string;
 };
 
-const Header = ({ style, username }: HeaderProps) => {
+const Header = ({ style, name }: HeaderProps) => {
     return (
         <View style={style}>
             {/* <Image {...imageProps} /> */}
-            <ThemedHeading size="sm">@{username}</ThemedHeading>
+            <ThemedHeading size="sm">{name}</ThemedHeading>
         </View>
     );
 };
@@ -127,7 +119,9 @@ type FooterProps = {
 const Footer = ({ description }: FooterProps) => {
     return (
         <View style={styles.footer}>
-            {description && <Text style={styles.footer}>{description}</Text>}
+            {description && (
+                <Text style={styles.footerText}>{description}</Text>
+            )}
         </View>
     );
 };

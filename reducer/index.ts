@@ -1,20 +1,23 @@
 import image, { ImageState } from "@/reducer/imageReducer";
 import user, { UserState } from "@/reducer/userReducer";
+import post, { PostState } from "@/reducer/postReducer";
 
 type Reducers = {
     image: typeof image.reducer;
     user: typeof user.reducer;
+    post: typeof post.reducer;
     [x: string]: any;
 };
 
 export type Action = {
     type: string;
-    data?: Record<string, any>
+    data?: Record<string, any>;
 };
 
 export type State = {
     image: ImageState;
     user: UserState;
+    post: PostState;
     [x: string]: any;
 };
 
@@ -32,9 +35,11 @@ const combineReducers = (slices: Reducers) => (state: State, action: Action) =>
 export const rootReducer = combineReducers({
     image: image.reducer,
     user: user.reducer,
+    post: post.reducer,
 });
 
 export const initialState = {
     image: image.initialState,
     user: user.initialState,
+    post: post.initialState,
 };
