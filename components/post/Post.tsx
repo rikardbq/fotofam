@@ -64,12 +64,19 @@ export const Post = ({ post, description }: PostProps) => {
 
     useEffect(() => {
         (async () => {
-            await postService.getImageByName(
-                post.image_name,
-                setImage,
-                db
+            const getImageStatement = await db.prepareAsync(
+                CACHE.STATEMENTS.GET.IMAGE
             );
-            
+            const insertImageStatement = await db.prepareAsync(
+                CACHE.STATEMENTS.INSERT.IMAGE
+            );
+
+            const data = await postService.getImageByName(post.image_name, {
+                get: getImageStatement,
+                insert: insertImageStatement,
+            });
+
+            setImage(data);
         })();
     }, []);
 

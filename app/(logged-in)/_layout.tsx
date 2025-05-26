@@ -1,8 +1,8 @@
-import { useContext, useEffect } from "react";
 import { Redirect, Stack } from "expo-router";
+import { useContext, useEffect } from "react";
 
 import { AppContext } from "@/context/AppContext";
-import { destroyCache } from "@/util/cache";
+import { vacuumCache } from "@/util/cache";
 import { useSQLiteContext } from "expo-sqlite";
 
 export default () => {
@@ -13,12 +13,9 @@ export default () => {
     // debug test bg colors etc
     // return null;
 
-    // THIS WILL DESTROY CACHE EACH TIME USER LOGS OUT OR RESTARTS APP
     useEffect(() => {
         return () => {
-            console.log("DESTROY ON UNMOUNT ");
-
-            destroyCache(db);
+            vacuumCache(db);
         };
     }, []);
 

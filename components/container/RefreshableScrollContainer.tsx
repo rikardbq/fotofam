@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import {
     Gesture,
@@ -22,6 +22,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle } from "react-native-svg";
 
 import { ScrollContainer } from "./ScrollContainer";
+import { resetCache } from "@/util/cache";
+import { useSQLiteContext } from "expo-sqlite";
 
 const REFRESH_CIRCLE_SIZE = 42;
 const REFRESH_CIRCLE_BG_SIZE = REFRESH_CIRCLE_SIZE + 4;
@@ -60,6 +62,7 @@ const styles = StyleSheet.create({
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
+    const db = useSQLiteContext();
     const insets = useSafeAreaInsets();
     const REFRESH_CIRCLE_INITIAL_POS = useMemo(
         () => insets.top + 12,
@@ -67,11 +70,18 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
     );
 
     const [isPanEnabled, setIsPanEnabled] = useState(true);
+    const [shouldRefresh, setShouldRefresh] = useState(false);
     const refreshCirclePos = useSharedValue(REFRESH_CIRCLE_INITIAL_POS);
     const refreshCircleOpacity = useSharedValue(REFRESH_CIRCLE_INITIAL_OPACITY);
     const refreshCircleStroke = useSharedValue(
         REFRESH_CIRCLE_INITIAL_DASHOFFSET
     );
+
+    useEffect(() => {
+        if (shouldRefresh) {
+            resetCache(db);
+        }
+    }, [shouldRefresh]);
 
     const updatePanState = (offset: number) => {
         "worklet";
@@ -96,6 +106,12 @@ export const RefreshableScrollContainer = ({ children, ...rest }: any) => {
                 refreshCircleStroke.value =
                     REFRESH_CIRCLE_INITIAL_DASHOFFSET -
                     REFRESH_CIRCLE_INITIAL_DASHOFFSET * clampPercent;
+                
+                if (clampPercent === 1) {
+                    runOnJS(setShouldRefresh)(true);
+                } else {
+                    runOnJS(setShouldRefresh)(false);
+                }
             }
         })
         .onFinalize(({ translationY }) => {

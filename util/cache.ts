@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from "expo-sqlite";
+import { SQLiteDatabase, SQLiteStatement } from "expo-sqlite";
 
 export const initCache = async (db: SQLiteDatabase) => {
     await db.execAsync(`
@@ -13,9 +13,22 @@ export const initCache = async (db: SQLiteDatabase) => {
     `);
 };
 
+export const resetCache = async (db: SQLiteDatabase) => {
+    await db.execAsync(`
+        DELETE FROM images;
+        UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='images';
+    `);
+};
+
+export const vacuumCache = async (db: SQLiteDatabase) => {
+    await db.execAsync("VACUUM;");
+};
+
 export const destroyCache = async (db: SQLiteDatabase) => {
     await db.execAsync(`
         DROP INDEX IF EXISTS idx_images_name;
         DROP TABLE images;
     `);
 };
+
+export type Statements = Record<string, SQLiteStatement>;

@@ -1,8 +1,7 @@
 import * as api from "@/api";
 import { Action, State, Store } from "@/reducer";
 import { createAuthHeader } from "@/util/auth";
-import { CACHE } from "@/util/constants";
-import { SQLiteDatabase } from "expo-sqlite";
+import { Statements } from "@/util/cache";
 
 export default class PostService {
     private state: State;
@@ -95,8 +94,7 @@ export default class PostService {
 
     async getImageByName(
         imageName: string,
-        setImage: React.SetStateAction<any>,
-        cache?: SQLiteDatabase
+        statements?: Statements
     ): Promise<any> {
         const fetchImage = async () => {
             const { data } = await api.get(
@@ -107,30 +105,23 @@ export default class PostService {
             return data;
         };
 
-        if (!cache) {
-            const image = await fetchImage();
-            setImage(image);
+        if (!statements || !statements.get || !statements.insert) {
+            return await fetchImage();
         }
 
-        const getImageStatement = await cache?.prepareAsync(
-            CACHE.STATEMENTS.GET.IMAGE
-        );
-
-        const insertImageStatement = await cache?.prepareAsync(
-            CACHE.STATEMENTS.INSERT.IMAGE
-        );
+        const { get, insert } = statements;
 
         try {
             let image: any = await (
-                await getImageStatement?.executeAsync({
+                await get.executeAsync({
                     $name: imageName,
                 })
-            )?.getFirstAsync();
+            ).getFirstAsync();
 
             if (!image) {
                 image = await fetchImage();
 
-                await insertImageStatement?.executeAsync({
+                await insert.executeAsync({
                     $name: image.name,
                     $width: image.width,
                     $height: image.height,
@@ -138,9 +129,7 @@ export default class PostService {
                 });
             }
 
-            if (!!image) {
-                setImage(image);
-            }
+            return image;
         } catch (error: any) {
             const response = error.response;
             const path = response.request.responseURL;
@@ -151,8 +140,8 @@ export default class PostService {
 
             throw error;
         } finally {
-            await getImageStatement?.finalizeAsync();
-            await insertImageStatement?.finalizeAsync();
+            await get.finalizeAsync();
+            await insert.finalizeAsync();
         }
     }
 }
