@@ -108,28 +108,29 @@ export default class PostService {
         };
 
         if (!cache) {
-            return await fetchImage();
+            const image = await fetchImage();
+            setImage(image);
         }
 
-        const getImageStatement = await cache.prepareAsync(
+        const getImageStatement = await cache?.prepareAsync(
             CACHE.STATEMENTS.GET.IMAGE
         );
 
-        const insertImageStatement = await cache.prepareAsync(
+        const insertImageStatement = await cache?.prepareAsync(
             CACHE.STATEMENTS.INSERT.IMAGE
         );
 
         try {
             let image: any = await (
-                await getImageStatement.executeAsync({
+                await getImageStatement?.executeAsync({
                     $name: imageName,
                 })
-            ).getFirstAsync();
+            )?.getFirstAsync();
 
             if (!image) {
                 image = await fetchImage();
 
-                await insertImageStatement.executeAsync({
+                await insertImageStatement?.executeAsync({
                     $name: image.name,
                     $width: image.width,
                     $height: image.height,
@@ -150,8 +151,8 @@ export default class PostService {
 
             throw error;
         } finally {
-            await getImageStatement.finalizeAsync();
-            await insertImageStatement.finalizeAsync();
+            await getImageStatement?.finalizeAsync();
+            await insertImageStatement?.finalizeAsync();
         }
     }
 }
