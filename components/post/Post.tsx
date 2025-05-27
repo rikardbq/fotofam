@@ -1,13 +1,10 @@
-import globalStyles, { PADDINGS } from "@/util/globalStyles";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
-import ThemedHeading from "../typography/theme/ThemedHeading";
-import Spinner from "../loading/Spinner";
-import { useContext, useEffect, useState } from "react";
-import { appID } from "@/fotofamExtra.json";
-import axios from "axios";
 import { AppContext } from "@/context/AppContext";
-import { useSQLiteContext } from "expo-sqlite";
 import { CACHE } from "@/util/constants";
+import { PADDINGS } from "@/util/globalStyles";
+import { useContext, useEffect, useState } from "react";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import Spinner from "../loading/Spinner";
+import ThemedHeading from "../typography/theme/ThemedHeading";
 
 const styles = StyleSheet.create({
     spinner: {
@@ -57,17 +54,16 @@ type PostProps = {
 // const screenAspectRatio = Dimensions.get("window").height / Dimensions.get("window").width;
 
 export const Post = ({ post, description }: PostProps) => {
-    const { store, postService } = useContext(AppContext);
-    const db = useSQLiteContext();
+    const { store, postService, cache } = useContext(AppContext);
     const [state, _] = store;
     const [image, setImage] = useState<any>({});
 
     useEffect(() => {
         (async () => {
-            const getImageStatement = await db.prepareAsync(
+            const getImageStatement = await cache.prepareAsync(
                 CACHE.STATEMENTS.GET.IMAGE
             );
-            const insertImageStatement = await db.prepareAsync(
+            const insertImageStatement = await cache.prepareAsync(
                 CACHE.STATEMENTS.INSERT.IMAGE
             );
 

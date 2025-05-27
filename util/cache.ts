@@ -2,6 +2,11 @@ import { SQLiteDatabase, SQLiteStatement } from "expo-sqlite";
 
 export const initCache = async (db: SQLiteDatabase) => {
     await db.execAsync(`
+        PRAGMA journal_mode = wal;
+        PRAGMA synchronous = normal;
+        PRAGMA auto_vacuum = full;
+        PRAGMA analysis_limit=400;
+        PRAGMA optimize;
         CREATE TABLE IF NOT EXISTS images(
             id INTEGER PRIMARY KEY,
             name TEXT UNIQUE NOT NULL,
@@ -20,10 +25,7 @@ export const resetCache = async (db: SQLiteDatabase) => {
     await db.execAsync("DELETE FROM images;");
 };
 
-export const vacuumCache = async (db: SQLiteDatabase) => {
-    await db.execAsync("VACUUM;");
-};
-
+// this is for admin purposes, in some profile settings page this can be used to completely reset cache and / or enable disable cache alltogether
 export const destroyCache = async (db: SQLiteDatabase) => {
     await db.execAsync(`
         DROP INDEX IF EXISTS idx_images_name;

@@ -2,9 +2,8 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { getItem } from "expo-secure-store";
 import * as SplashScreen from "expo-splash-screen";
-import { SQLiteProvider } from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
-import { Suspense, useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
 import {
     AppContextConsumer,
@@ -12,6 +11,7 @@ import {
     AppContextProvider,
 } from "@/context/AppContext";
 
+import { useCache } from "@/hooks/useCache";
 import { useAuthService } from "@/hooks/useService";
 import { useStore } from "@/hooks/useStore";
 import { ColorSchemes } from "@/hooks/useTheme";
@@ -42,6 +42,7 @@ export default function RootLayout() {
         [FONT_NAMES.RUBIK_MEDIUM_ITALIC]: require("../assets/fonts/Rubik-MediumItalic.ttf"),
         [FONT_NAMES.RUBIK_BOLD_ITALIC]: require("../assets/fonts/Rubik-BoldItalic.ttf"),
     });
+    const { cache, cacheLoading } = useCache(initCache);
     const store = useStore();
     const [state, dispatch] = store;
     const authService = useAuthService(store);
@@ -58,47 +59,39 @@ export default function RootLayout() {
     }, []);
 
     useEffect(() => {
-        if (loaded) {
+        if (loaded && !cacheLoading) {
             SplashScreen.hideAsync();
 
             if (!state.user.loggedIn && !!state.user.auth_t) {
                 authService.login(state.user.auth_t);
             }
         }
-    }, [loaded]);
+    }, [loaded, cacheLoading]);
 
-    if (!loaded) {
-        return null;
-    }
+    if (!loaded || cacheLoading) return null;
 
     return (
-        <Suspense fallback={null}>
-            <SQLiteProvider
-                databaseName="cache.db"
-                onInit={initCache}
-                useSuspense
-            >
-                <AppContextProvider store={store} authService={authService}>
-                    <AppContextConsumer>
-                        {({ colorScheme, theme }: AppContextDefaultState) => (
-                            <>
-                                <Stack
-                                    screenOptions={{
-                                        animation: "none",
-                                        headerShown: false,
-                                        contentStyle: {
-                                            backgroundColor: theme.colors.BG0,
-                                        },
-                                    }}
-                                />
-                                <StatusBar
-                                    style={getStatusBarStyle(colorScheme)}
-                                />
-                            </>
-                        )}
-                    </AppContextConsumer>
-                </AppContextProvider>
-            </SQLiteProvider>
-        </Suspense>
+        <AppContextProvider
+            store={store}
+            cache={cache!}
+            authService={authService}
+        >
+            <AppContextConsumer>
+                {({ colorScheme, theme }: AppContextDefaultState) => (
+                    <>
+                        <Stack
+                            screenOptions={{
+                                animation: "none",
+                                headerShown: false,
+                                contentStyle: {
+                                    backgroundColor: theme.colors.BG0,
+                                },
+                            }}
+                        />
+                        <StatusBar style={getStatusBarStyle(colorScheme)} />
+                    </>
+                )}
+            </AppContextConsumer>
+        </AppContextProvider>
     );
 }

@@ -3,6 +3,7 @@ import { RefreshableScrollContainer } from "@/components/container/RefreshableSc
 import { AppContext } from "@/context/AppContext";
 import { useNavigation } from "@/hooks/useNavigation";
 import { useImageService } from "@/hooks/useService";
+import { destroyCache } from "@/util/cache";
 import axios from "axios";
 import { Link } from "expo-router";
 import { useContext, useState } from "react";
@@ -35,7 +36,7 @@ created_at = photos[photos.length - 1]?.created_at ?? 0;
 
 export default function Index(props: any) {
     console.log(props);
-    const { store, localization } = useContext(AppContext);
+    const { store, localization, cache } = useContext(AppContext);
     const [state, dispatch] = store;
     const imageService = useImageService([state, dispatch]);
     const {
@@ -69,6 +70,7 @@ export default function Index(props: any) {
                 title={localization["label.next"]}
                 onPress={() => {} /*getData()*/}
             />
+            <LocalizedButton label="DESTROY CACHE" onPress={() => destroyCache(cache)} />
             <View style={{ backgroundColor: "#fff" }}>
                 <Link
                     href={"/post/123" as any}

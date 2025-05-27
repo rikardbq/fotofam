@@ -27,6 +27,7 @@ export const FONT_NAMES = {
 };
 
 export const CACHE = {
+    DB_NAME: "cache.db",
     STATEMENTS: {
         INSERT: {
             IMAGE: "INSERT INTO images (name, width, height, base64) VALUES ($name, $width, $height, $base64)",

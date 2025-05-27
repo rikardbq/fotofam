@@ -2,15 +2,13 @@ import { Redirect, Stack } from "expo-router";
 import { useContext, useEffect } from "react";
 
 import { AppContext } from "@/context/AppContext";
-import { resetCache, vacuumCache } from "@/util/cache";
-import { useSQLiteContext } from "expo-sqlite";
+import { resetCache } from "@/util/cache";
+import { SECURE_STORE_VARS } from "@/util/constants";
 import { daySeconds, nowSeconds } from "@/util/time";
 import { getItemAsync } from "expo-secure-store";
-import { SECURE_STORE_VARS } from "@/util/constants";
 
 export default () => {
-    const { store } = useContext(AppContext);
-    const db = useSQLiteContext();
+    const { store, cache } = useContext(AppContext);
     const state = store[0];
 
     // debug test bg colors etc
@@ -21,9 +19,8 @@ export default () => {
             const lastLogin =
                 (await getItemAsync(SECURE_STORE_VARS.lastLogin)) ?? "0";
             if (nowSeconds() - parseInt(lastLogin) > daySeconds() / 4) {
-                await resetCache(db);
+                await resetCache(cache);
             }
-            await vacuumCache(db);
         })();
     }, []);
 

@@ -9,12 +9,14 @@ import { I18NBase, languages } from "@/i18n";
 import { Action, State, Store } from "@/reducer";
 import PostService from "@/service/PostService";
 import { AppTheme } from "@/util/theme";
+import { SQLiteDatabase } from "expo-sqlite";
 
 export type AppContextDefaultState = {
     theme: AppTheme;
     colorScheme: ColorSchemes;
     setColorScheme: React.Dispatch<React.SetStateAction<ColorSchemes>>;
     store: Store;
+    cache: SQLiteDatabase;
     localization: I18NBase;
     authService: AuthService;
     postService: PostService;
@@ -28,6 +30,7 @@ export const AppContext: React.Context<AppContextDefaultState> =
             React.SetStateAction<ColorSchemes>
         >,
         store: [{} as State, {} as React.Dispatch<Action>],
+        cache: {} as SQLiteDatabase,
         localization: {} as I18NBase,
         authService: {} as AuthService,
         postService: {} as PostService,
@@ -35,12 +38,14 @@ export const AppContext: React.Context<AppContextDefaultState> =
 
 type AppContextProviderProps = {
     store: Store;
+    cache: SQLiteDatabase;
     authService: AuthService;
     children: React.ReactNode;
 };
 
 export const AppContextProvider = ({
     store,
+    cache,
     authService,
     children,
 }: AppContextProviderProps) => {
@@ -55,6 +60,7 @@ export const AppContextProvider = ({
                 colorScheme,
                 setColorScheme,
                 store,
+                cache,
                 localization,
                 authService,
                 postService,
