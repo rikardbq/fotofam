@@ -3,7 +3,7 @@ import { CACHE } from "@/util/constants";
 import { PADDINGS } from "@/util/globalStyles";
 import { useContext, useEffect, useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
-import Spinner from "../loading/Spinner";
+import { Spinner, Suspended } from "../loading";
 import ThemedHeading from "../typography/theme/ThemedHeading";
 
 const styles = StyleSheet.create({
@@ -57,6 +57,7 @@ export const Post = ({ post, description }: PostProps) => {
     const { store, postService, cache } = useContext(AppContext);
     const [state, _] = store;
     const [image, setImage] = useState<any>({});
+    const [imageLoading, setImageLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
@@ -73,13 +74,32 @@ export const Post = ({ post, description }: PostProps) => {
             });
 
             setImage(data);
+            setImageLoading(false);
         })();
     }, []);
 
     return (
         <View style={styles.container}>
             <Header style={styles.header} name={state.user.realName ?? ""} />
-            {!image.base64 ? (
+            <Suspended
+                isLoading={imageLoading}
+                fallback={
+                    <View style={styles.spinner}>
+                        <Spinner />
+                    </View>
+                }
+            >
+                <Image
+                    source={{ uri: image.base64 }}
+                    style={{
+                        backgroundColor: "#2222ff",
+                        aspectRatio: 1 / 1,
+                        resizeMode: "contain",
+                        objectFit: "contain",
+                    }}
+                />
+            </Suspended>
+            {/* {!image.base64 ? (
                 <View style={styles.spinner}>
                     <Spinner />
                 </View>
@@ -98,7 +118,7 @@ export const Post = ({ post, description }: PostProps) => {
                         objectFit: "contain", // should be "contain" but use cover for now to emulate the look of 1:1 aspect ratio picture
                     }}
                 />
-            )}
+            )} */}
             {/* <Footer description="some text here to describe the photo, and then some more stuff to describe it like wtf is this text? some text here to describe the photo, and then some more stuff to describe it like wtf is this text? sdsdasdsd dsad dasdasd asdas dasd asd asd asd asd sss" /> */}
             <Footer
                 description={

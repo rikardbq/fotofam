@@ -7,7 +7,7 @@ import { destroyCache } from "@/util/cache";
 import axios from "axios";
 import { Link } from "expo-router";
 import { useContext, useState } from "react";
-import { Button, Image, StyleSheet, View } from "react-native";
+import { Button, Image, Pressable, StyleSheet, Text, View } from "react-native";
 // import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
@@ -66,11 +66,10 @@ export default function Index(props: any) {
                 label="label.login"
                 onPress={() => nav.navigate("experiment/component_test")}
             />
-            <Button
-                title={localization["label.next"]}
-                onPress={() => {} /*getData()*/}
+            <LocalizedButton
+                label="DESTROY CACHE"
+                onPress={() => destroyCache(cache)}
             />
-            <LocalizedButton label="DESTROY CACHE" onPress={() => destroyCache(cache)} />
             <View style={{ backgroundColor: "#fff" }}>
                 <Link
                     href={"/post/123" as any}

@@ -2,7 +2,7 @@ import LocalizedButton from "@/components/buttons/i18n/LocalizedButton";
 import { BaseContainer } from "@/components/container/BaseContainer";
 import { ScrollContainer } from "@/components/container/ScrollContainer";
 import BouncingDots from "@/components/loading/BouncingDots";
-import Spinner from "@/components/loading/Spinner";
+import {Spinner} from "@/components/loading";
 import { AppContext } from "@/context/AppContext";
 import { useNavigation } from "@/hooks/useNavigation";
 import { encodePassword } from "@/util/auth";
