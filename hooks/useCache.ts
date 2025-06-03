@@ -7,19 +7,19 @@ export const useCache = (
     onInit: (a: SQLite.SQLiteDatabase) => Promise<void>
 ): {
     cache: SQLite.SQLiteDatabase | null;
-    cacheLoading: boolean;
+    cacheLoaded: boolean;
 } => {
     const [cache, setCache] = useState<SQLite.SQLiteDatabase | null>(null);
-    const [cacheLoading, setCacheLoading] = useState(true);
+    const [cacheLoaded, setCacheLoaded] = useState(false);
 
     useEffect(() => {
         (async () => {
             const db = await SQLite.openDatabaseAsync(CACHE.DB_NAME);
             await onInit(db);
             setCache(db);
-            setCacheLoading(false);
+            setCacheLoaded(true);
         })();
     }, []);
 
-    return { cache, cacheLoading };
+    return { cache, cacheLoaded };
 };

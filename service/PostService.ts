@@ -144,4 +144,35 @@ export default class PostService {
             await insert.finalizeAsync();
         }
     }
+
+    async createPost(base64: string, description: string): Promise<void> {
+        try {
+            const body = {
+                post: {
+                    description,
+                },
+                image: {
+                    name: this.state.post.addPostFlow.image.name,
+                    width: this.state.post.addPostFlow.image.width,
+                    height: this.state.post.addPostFlow.image.height,
+                    base64,
+                },
+            };
+
+            await api.post(
+                "posts",
+                body,
+                createAuthHeader(this.state.user.auth_t!)
+            );
+        } catch (error: any) {
+            const response = error.response;
+            const path = response.request.responseURL;
+            const status = response.status;
+
+            console.error(path);
+            console.error(status);
+
+            throw error;
+        }
+    }
 }

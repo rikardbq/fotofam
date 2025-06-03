@@ -148,18 +148,22 @@ export default () => {
                 cropperStatusBarColor: "#000000",
                 cropperToolbarTitle: localization["label.edit"],
             }).then((image) => {
+                console.log("LOGGING CROPPED PHOTO _--_> ", image);
+
                 dispatch({
-                    type: "SET_CROPPED_PHOTO",
+                    type: "SET_ADD_POST_FLOW_IMAGE",
                     data: {
                         values: {
-                            path: image?.path,
-                            width: image?.width,
-                            height: image?.height,
+                            image: {
+                                name: image.filename,
+                                width: image.width,
+                                height: image.height,
+                                path: image.path,
+                            },
                         },
                     },
                 });
-                // navigation.navigate("index");
-                router.replace("/(logged-in)/(tabs)/(add_post)");
+                navigation.navigate("add_description");
             });
         }
     }, [state.image.currentPhoto]);

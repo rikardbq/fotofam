@@ -42,7 +42,7 @@ export default function RootLayout() {
         [FONT_NAMES.RUBIK_MEDIUM_ITALIC]: require("../assets/fonts/Rubik-MediumItalic.ttf"),
         [FONT_NAMES.RUBIK_BOLD_ITALIC]: require("../assets/fonts/Rubik-BoldItalic.ttf"),
     });
-    const { cache, cacheLoading } = useCache(initCache);
+    const { cache, cacheLoaded } = useCache(initCache);
     const store = useStore();
     const [state, dispatch] = store;
     const authService = useAuthService(store);
@@ -59,16 +59,16 @@ export default function RootLayout() {
     }, []);
 
     useEffect(() => {
-        if (loaded && !cacheLoading) {
+        if (loaded && cacheLoaded) {
             SplashScreen.hideAsync();
 
             if (!state.user.loggedIn && !!state.user.auth_t) {
                 authService.login(state.user.auth_t);
             }
         }
-    }, [loaded, cacheLoading]);
+    }, [loaded, cacheLoaded]);
 
-    if (!loaded || cacheLoading) return null;
+    if (!loaded || !cacheLoaded) return null;
 
     return (
         <AppContextProvider
