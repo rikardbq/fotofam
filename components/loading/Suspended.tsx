@@ -2,18 +2,19 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 
 type Suspended = {
     isLoading: boolean;
-    fallback: ReactNode;
+    fallback?: ReactNode;
+    threshold?: number;
     children: ReactNode;
 };
 
-export const Suspended = ({ isLoading, fallback, children }: Suspended) => {
+export const Suspended = ({ isLoading, fallback = null, threshold = 500, children }: Suspended) => {
     const timerRef = useRef<any>(null);
     const [showFallback, setShowFallback] = useState(false);
 
     useEffect(() => {
         timerRef.current = setTimeout(() => {
             setShowFallback(true);
-        }, 500);
+        }, threshold);
     }, []);
 
     useEffect(() => {
