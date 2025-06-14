@@ -4,21 +4,16 @@ export type I18NBase = typeof base;
 export type I18NKeys = keyof I18NBase;
 export type I18NLanguages = "en_US" | "se_SV";
 
-const mergeWithBase = (lang: Record<string, any>) => ({
+const mergeWithBase = (lang: I18NBase) => ({
     ...base,
     ...lang,
 });
 
-export const languages: Record<string, I18NLanguages> = {
-    eng: "en_US",
-    swe: "se_SV",
-};
-
-export default (lang: I18NLanguages) => {
+export default (lang: I18NLanguages | undefined) => {
     switch (lang) {
-        case languages.eng:
+        case "en_US":
             return mergeWithBase(require("./langs/en_US.json"));
-        case languages.swe:
+        case "se_SV":
             return mergeWithBase(require("./langs/se_SV.json"));
     }
 

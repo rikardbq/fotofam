@@ -5,7 +5,7 @@ import AuthService from "@/service/AuthService";
 
 import { usePostService } from "@/hooks/useService";
 import { ColorSchemes, useTheme } from "@/hooks/useTheme";
-import { I18NBase, languages } from "@/i18n";
+import { I18NBase } from "@/i18n";
 import { Action, State, Store } from "@/reducer";
 import PostService from "@/service/PostService";
 import { AppTheme } from "@/util/theme";
@@ -49,7 +49,7 @@ export const AppContextProvider = ({
     authService,
     children,
 }: AppContextProviderProps) => {
-    const localization = useI18N(languages.swe);
+    const localization = useI18N("en_US");
     const { theme, colorScheme, setColorScheme } = useTheme();
     const postService = usePostService(store);
 

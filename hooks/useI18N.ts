@@ -1,5 +1,5 @@
-import i18n, { I18NLanguages, languages } from "@/i18n";
+import i18n, { I18NLanguages } from "@/i18n";
 
-export const useI18N = (lang: I18NLanguages = languages.eng) => {
+export const useI18N = (lang: I18NLanguages = "en_US") => {
     return i18n(lang);
 };
