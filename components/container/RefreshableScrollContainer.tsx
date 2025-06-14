@@ -105,7 +105,7 @@ export const RefreshableScrollContainer = ({
                 const percent = pos / maxPos;
                 const clampPercent = percent > 1 ? 1 : percent;
 
-                refreshCirclePos.value = pos > maxPos ? maxPos : pos;
+                refreshCirclePos.value = pos > maxPos + 25 ? maxPos + 25 : pos;
                 refreshCircleOpacity.value = clampPercent;
                 refreshCircleStroke.value =
                     REFRESH_CIRCLE_INITIAL_DASHOFFSET -

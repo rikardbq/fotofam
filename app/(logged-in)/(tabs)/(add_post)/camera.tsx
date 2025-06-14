@@ -44,6 +44,19 @@ export default () => {
         if (isInit && isDoubleTap) {
             (async () => {
                 const file = await camera.current?.takePhoto();
+                if (file) {
+                    // resize here and then set image
+                    dispatch({
+                        type: "SET_CURRENT_PHOTO",
+                        data: {
+                            values: {
+                                path: file.path,
+                                width: file.width,
+                                height: file.height,
+                            },
+                        },
+                    });
+                }
 
                 console.log("FILE ______> ", file);
 
@@ -53,14 +66,14 @@ export default () => {
                 // so the backend can serve the image from the slug name rather than the exact file name on disk
 
                 // OR i save it all as blobs and serve directly from DB, completely not doing any static file server-ish stuff
-                const result = await fetch(`file://${file?.path}`);
-                const data = await result.blob();
+                // const result = await fetch(`file://${file?.path}`);
+                // const data = await result.blob();
 
-                // const test = new Blob([data.toString()]);
-                // console.log(formData);
+                // // const test = new Blob([data.toString()]);
+                // // console.log(formData);
 
-                const splitFileName = file?.path.split("/");
-                const slug = splitFileName![splitFileName!.length - 1];
+                // const splitFileName = file?.path.split("/");
+                // const slug = splitFileName![splitFileName!.length - 1];
                 // const formData = new FormData();
                 // formData.append("image", (await getBase64(data)) as string);
                 // formData.append(
@@ -72,8 +85,8 @@ export default () => {
                 //         height: file?.height,
                 //     })
                 // );
-                const start = new Date().getTime();
-                const b64_data = (await getBase64(data)) as string;
+                // const start = new Date().getTime();
+                // const b64_data = (await getBase64(data)) as string;
                 // const b = new Blob([b64_data], {
                 //     type: "application/octet-stream"
                 // });
@@ -88,23 +101,23 @@ export default () => {
                 // console.log(buffer);
 
                 // const resp = await postDataMPart(formData);
-                const resp = await postData2({
-                    imgB64: b64_data,
-                    metadata: {
-                        name: file?.path,
-                        slug,
-                        width: file?.width,
-                        height: file?.height,
-                    },
-                });
-                const resp2 = await postData(
-                    new TextEncoder().encode(b64_data)
-                );
-                console.log(resp.data);
-                console.log(resp2.data);
+                // const resp = await postData2({
+                //     imgB64: b64_data,
+                //     metadata: {
+                //         name: file?.path,
+                //         slug,
+                //         width: file?.width,
+                //         height: file?.height,
+                //     },
+                // });
+                // const resp2 = await postData(
+                //     new TextEncoder().encode(b64_data)
+                // );
+                // console.log(resp.data);
+                // console.log(resp2.data);
 
-                // const resp = await postData(b64_data);
-                console.log(new Date().getTime() - start);
+                // // const resp = await postData(b64_data);
+                // console.log(new Date().getTime() - start);
 
                 // console.log(resp.data);
 

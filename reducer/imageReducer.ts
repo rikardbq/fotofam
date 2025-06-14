@@ -35,7 +35,7 @@ type Action = RootAction & {
 const reducer = (state: ImageState, action: Action) => {
     switch (action.type) {
         case actions.SET_CURRENT_PHOTO: {
-            console.log("sick", action);
+            console.log("SET_CURRENT_PHOTO::: ", action);
 
             return {
                 ...state,

@@ -1,10 +1,11 @@
 import { AppContext } from "@/context/AppContext";
 import { CACHE } from "@/util/constants";
 import { PADDINGS } from "@/util/globalStyles";
+import { Image } from "expo-image";
 import { useContext, useEffect, useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
-import { Spinner, Suspended } from "../loading";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import ThemedHeading from "../typography/theme/ThemedHeading";
+import { getRelativeCreatedAt } from "@/util/time";
 
 const styles = StyleSheet.create({
     spinner: {
@@ -81,24 +82,17 @@ export const Post = ({ post, description }: PostProps) => {
     return (
         <View style={styles.container}>
             <Header style={styles.header} name={state.user.realName ?? ""} />
-            <Suspended
-                isLoading={imageLoading}
-                fallback={
-                    <View style={styles.spinner}>
-                        <Spinner />
-                    </View>
-                }
-            >
-                <Image
-                    source={{ uri: image.base64 }}
-                    style={{
-                        backgroundColor: "#2222ff",
-                        aspectRatio: 1 / 1,
-                        resizeMode: "contain",
-                        objectFit: "contain",
-                    }}
-                />
-            </Suspended>
+            <Image
+                source={{ uri: image.base64 }}
+                style={{
+                    backgroundColor: "#2222ff",
+                    aspectRatio: 1 / 1,
+                    resizeMode: "contain",
+                    objectFit: "contain",
+                }}
+                placeholder={{ blurhash: post.blurhash }}
+                transition={1000}
+            />
             {/* {!image.base64 ? (
                 <View style={styles.spinner}>
                     <Spinner />
@@ -121,9 +115,7 @@ export const Post = ({ post, description }: PostProps) => {
             )} */}
             {/* <Footer description="some text here to describe the photo, and then some more stuff to describe it like wtf is this text? some text here to describe the photo, and then some more stuff to describe it like wtf is this text? sdsdasdsd dsad dasdasd asdas dasd asd asd asd asd sss" /> */}
             <Footer
-                description={
-                    description ?? "some text here to describe the photo"
-                }
+                description={getRelativeCreatedAt("se_SV", post.created_at)}
             />
         </View>
     );

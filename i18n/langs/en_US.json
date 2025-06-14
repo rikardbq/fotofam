@@ -5,5 +5,13 @@
     "label.authenticate": "Authenticate",
     "label.authorize": "Authorize",
     "label.login": "Log in",
-    "label.edit": "Edit"
+    "label.edit": "Edit",
+    "label.time.ago": "ago",
+    "label.time.hour": "hour",
+    "label.time.hours": "hours",
+    "label.time.day": "day",
+    "label.time.days": "days",
+    "label.time.yesterday": "yesterday",
+    "label.time.week": "week",
+    "label.time.justnow": "just now"
 }

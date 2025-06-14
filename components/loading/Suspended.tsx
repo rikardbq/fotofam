@@ -7,19 +7,23 @@ type Suspended = {
     children: ReactNode;
 };
 
-export const Suspended = ({ isLoading, fallback = null, threshold = 500, children }: Suspended) => {
+export const Suspended = ({
+    isLoading,
+    fallback = null,
+    threshold = 0,
+    children,
+}: Suspended) => {
     const timerRef = useRef<any>(null);
     const [showFallback, setShowFallback] = useState(false);
 
     useEffect(() => {
-        timerRef.current = setTimeout(() => {
-            setShowFallback(true);
-        }, threshold);
-    }, []);
+        clearTimeout(timerRef.current);
 
-    useEffect(() => {
-        if (!isLoading) {
-            clearTimeout(timerRef.current);
+        if (isLoading) {
+            timerRef.current = setTimeout(() => {
+                setShowFallback(true);
+            }, threshold);
+        } else {
             setShowFallback(false);
         }
     }, [isLoading]);

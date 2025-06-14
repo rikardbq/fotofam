@@ -5,5 +5,13 @@
     "label.authenticate": "Autentisera",
     "label.authorize": "Auktorisera",
     "label.login": "Logga in",
-    "label.edit": "Redigera"
+    "label.edit": "Redigera",
+    "label.time.ago": "sedan",
+    "label.time.hour": "timme",
+    "label.time.hours": "timmar",
+    "label.time.day": "dag",
+    "label.time.days": "dagar",
+    "label.time.yesterday": "i går",
+    "label.time.week": "vecka",
+    "label.time.justnow": "nyss"
 }
