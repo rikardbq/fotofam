@@ -14,13 +14,13 @@ import {
 import { useCache } from "@/hooks/useCache";
 import { useAuthService } from "@/hooks/useService";
 import { useStore } from "@/hooks/useStore";
-import { ColorSchemes } from "@/hooks/useTheme";
+import { ColorScheme } from "@/hooks/useTheme";
 import { initCache } from "@/util/cache";
 import { FONT_NAMES, SECURE_STORE_VARS } from "@/util/constants";
 
 SplashScreen.preventAutoHideAsync();
 
-const getStatusBarStyle = (scheme: ColorSchemes) => {
+const getStatusBarStyle = (scheme: ColorScheme) => {
     switch (scheme) {
         case "dark":
             return "light";

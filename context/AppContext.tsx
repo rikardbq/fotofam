@@ -4,7 +4,7 @@ import { useI18N } from "@/hooks/useI18N";
 import AuthService from "@/service/AuthService";
 
 import { usePostService } from "@/hooks/useService";
-import { ColorSchemes, useTheme } from "@/hooks/useTheme";
+import { ColorScheme, useTheme } from "@/hooks/useTheme";
 import { I18NBase } from "@/i18n";
 import { Action, State, Store } from "@/reducer";
 import PostService from "@/service/PostService";
@@ -13,8 +13,8 @@ import { SQLiteDatabase } from "expo-sqlite";
 
 export type AppContextDefaultState = {
     theme: AppTheme;
-    colorScheme: ColorSchemes;
-    setColorScheme: React.Dispatch<React.SetStateAction<ColorSchemes>>;
+    colorScheme: ColorScheme;
+    setColorScheme: React.Dispatch<React.SetStateAction<ColorScheme>>;
     store: Store;
     cache: SQLiteDatabase;
     localization: I18NBase;
@@ -25,9 +25,9 @@ export type AppContextDefaultState = {
 export const AppContext: React.Context<AppContextDefaultState> =
     createContext<AppContextDefaultState>({
         theme: {} as AppTheme,
-        colorScheme: "system" as ColorSchemes,
+        colorScheme: "system",
         setColorScheme: {} as React.Dispatch<
-            React.SetStateAction<ColorSchemes>
+            React.SetStateAction<ColorScheme>
         >,
         store: [{} as State, {} as React.Dispatch<Action>],
         cache: {} as SQLiteDatabase,

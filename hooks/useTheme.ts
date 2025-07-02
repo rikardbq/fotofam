@@ -5,12 +5,12 @@ import { APP_THEME, AppTheme } from "@/util/theme";
 import { getItem, setItemAsync } from "expo-secure-store";
 import { SECURE_STORE_VARS } from "@/util/constants";
 
-export type ColorSchemes = "system" | "light" | "dark";
+export type ColorScheme = "system" | "light" | "dark";
 
 export const useTheme: () => {
     theme: AppTheme;
-    colorScheme: ColorSchemes;
-    setColorScheme: React.Dispatch<React.SetStateAction<ColorSchemes>>;
+    colorScheme: ColorScheme;
+    setColorScheme: React.Dispatch<React.SetStateAction<ColorScheme>>;
 } = () => {
     const storedSettings = getItem(SECURE_STORE_VARS.colorScheme);
     const systemColorScheme = useColorScheme();
@@ -18,8 +18,8 @@ export const useTheme: () => {
         systemColorScheme ?? "dark"
     );
 
-    const [colorScheme, setColorScheme] = useState<ColorSchemes>(
-        (storedSettings as ColorSchemes) ?? "system"
+    const [colorScheme, setColorScheme] = useState<ColorScheme>(
+        (storedSettings as ColorScheme) ?? "system"
     );
     const theme = useMemo(() => APP_THEME[userColorScheme], [userColorScheme]);
 
